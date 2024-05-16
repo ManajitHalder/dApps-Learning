@@ -60,7 +60,7 @@
   "sourceMap": "68:479:0:-;;;303:93;8:9:-1;5:2;;;30:1;27;20:12;5:2;303:93:0;328:30;;;;;;;;;;;;;;;;;;:12;;;:30;;:::i;:::-;362;;;;;;;;;;;;;;;;;;:12;;;:30;;:::i;:::-;68:479;;399:146;454:15;;:17;;;;;;;;;;;;;505:36;;;;;;;;515:15;;505:36;;;;532:5;505:36;;;;539:1;505:36;;;475:10;:27;486:15;;475:27;;;;;;;;;;;:66;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;399:146;:::o;68:479::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;",
   "deployedSourceMap": "68:479:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;68:479:0;;;;;;;;;;;;;;;;;;;;;;;;272:27;;;:::i;:::-;;;;;;;;;;;;;;;;;;;197:44;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;197:44:0;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;197:44:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;272:27;;;;:::o;197:44::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity >= 0.4.22 < 0.8.0;\n\ncontract Election {\n\t// Model Candidate\n\tstruct Candidate {\n\t\tuint id;\n\t\tstring name;\n\t\tuint voteCount;\n\t}\n\n\t// Fetch Candidate\n\tmapping(uint => Candidate) public candidates;\n\n\t// Store Candidates count\n\tuint public candidatesCount;\n\n\tconstructor() public {\n\t\taddCandidate(\"Reyansh Halder\");\n\t\taddCandidate(\"Agastya Halder\");\n\t}\n\n\tfunction addCandidate(string memory _name) private {\n\t\tcandidatesCount++;\n\t\tcandidates[candidatesCount] = Candidate(candidatesCount, _name, 0);\n\t}\n}",
-  "sourcePath": "/Users/reyansh/Code/Smart/dAppUniversity/election/contracts/Election.sol",
+  "sourcePath": "/Users/reyansh/Code/Smart/dAppLearned/election/contracts/Election.sol",
   "ast": {
     "absolutePath": "project:/contracts/Election.sol",
     "exportedSymbols": {
@@ -1330,12 +1330,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x30e2972ef0a95292169ff4D93aA553e0d8f6Ff5a",
-      "transactionHash": "0xbe6a2acbe986f215a9946d5caedab9eb9436d6148a30b72915e7b737515a425a"
+      "address": "0xd6b626755f514a80df26BA65C0607022C6868E48",
+      "transactionHash": "0x91e171c0b4ffab3501c2628841398fdb2813a176ad031c5ba234dd8dd79c22d5"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-05-15T12:20:36.652Z",
+  "updatedAt": "2024-05-16T06:29:25.646Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
