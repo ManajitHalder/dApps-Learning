@@ -19,7 +19,7 @@ contract Election {
 	mapping(address => bool) public voters;
 
 	// Vote event
-	event VotedEvent(uint _candidateId);
+	event votedEvent(uint indexed _candidateId);
 
 	constructor() public {
 		addCandidate("Reyansh Halder");
@@ -45,7 +45,7 @@ contract Election {
 		candidates[_candidateId].voteCount++;
 
 		// emit the vote event
-		emit VotedEvent(_candidateId);
+		emit votedEvent(_candidateId);
 	}
 
 	// Reset voting
