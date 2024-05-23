@@ -28,7 +28,7 @@ contract Todos {
     ) public view returns (string memory text, bool completed) {
         require(_index < todos.length, "Index out of bounds");
         
-        Todo storage todo = todos[_index];
+        Todo memory todo = todos[_index];
         return (todo.text, todo.completed);
     }
 
