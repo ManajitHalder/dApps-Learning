@@ -48,7 +48,7 @@ contract Election {
 		emit votedEvent(_candidateId);
 	}
 
-	// Reset voting
+	// Reset voting (used only for testing)
 	function resetVote(uint _candidateId) public {
 		voters[msg.sender] = false;
 		candidates[_candidateId].voteCount = 0;
