@@ -62,7 +62,7 @@ contract Base {
     // string external externalVar = "external variable";
 }
 
-contract Child is Base {
+contract Derived is Base {
     // Inherited contracts do not have access to private functions
     // and state variables.
     // function testPrivateFunctionChild() public pure returns (string memory) {
