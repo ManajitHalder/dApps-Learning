@@ -42,7 +42,7 @@ contract Array {
         delete arr[index];
     }
 
-    function arrayInMemory() external {
+    function arrayInMemory() external pure {
         uint256[] memory a = new uint256[](5);
     }
 }

@@ -20,9 +20,9 @@ contract Y {
 // There are 2 ways to initialize parent contract with parameters.
 
 // Pass the parameters here in the inheritance list.
-contract B is X("Bottleguard"), Y("Vegetable") {}
+contract BB is X("Bottleguard"), Y("Vegetable") {}
 
-contract C is X, Y {
+contract CC is X, Y {
     // Pass the parameters here in the constructor,
     // similar to function modifiers.
     constructor(string memory _name, string memory _desig) X(_name) Y(_desig) {}
@@ -35,15 +35,15 @@ contract C is X, Y {
 // Order of constructors called:
 // 1. X
 // 2. Y
-// 3. D
-contract D is X, Y {
+// 3. DD
+contract DD is X, Y {
     constructor() X("Cocoanut") Y("Fruit") {}
 }
 
 // Order of constructors called:
 // 1. X
 // 2. Y
-// 3. E
-contract E is X, Y {
+// 3. EE
+contract EE is X, Y {
     constructor() Y("Material") X("Stone") {}
 }
