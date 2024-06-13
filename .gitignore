@@ -1,2 +1,2 @@
 .DS_Store
-SolidityByExample/build/contracts/*
+SolidityByExample/build/contracts/*.json
