@@ -75,6 +75,33 @@ Delete your history after running this command for safety:
 history -c
 ```
 
+## Adding prettier and prettier-plugin-solidity packages
 
+Adding prettier and prettier-plugin-solidity packages to format the files in cases where prettier extension is not used.
+
+Add packages prettier and prettier-plugin-solidity
+
+```
+yarn add prettier prettier-plugin-solidity
+```
+
+Check your package.json to see prettier and prettier-plugin-solidity are added.
+
+Create a file .prettierrc to add configs. This file will take precedence over default configuration:
+
+```
+touch .prettierrc
+```
+
+Add formatting instructions for both javascript and solidity files:
+
+```
+{
+    "tabWidth": 4,
+    "semi": false,
+    "useTabs": false,
+    "singleQuote": false
+}
+```
 
 
