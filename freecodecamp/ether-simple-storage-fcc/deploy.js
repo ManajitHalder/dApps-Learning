@@ -8,7 +8,13 @@ async function main() {
   // console.log(`Private Key: ${process.env.PRIVATE_KEY}`);
 
   const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+  // const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+  const encryptedJson = fs.readFileSync('./.encryptedKey.json', 'utf8');
+  let wallet = ethers.Wallet.fromEncryptedJsonSync(
+    encryptedJson,
+    process.env.PRIVATE_KEY_PASSWORD
+  );
+  wallet = wallet.connect(provider);
 
   const abi = fs.readFileSync('./SimpleStorage_sol_SimpleStorage.abi', 'utf8');
   const binary = fs.readFileSync(
@@ -25,7 +31,9 @@ async function main() {
   // const contract = await contractFactory.deploy({ gasPrice: 100000000000 });
 
   try {
-    const contract = await contractFactory.deploy();
+    const nonce = await provider.getTransactionCount(wallet.address);
+
+    const contract = await contractFactory.deploy({ nonce });
     // console.log('Contract:', contract);
     // console.log('Contract address:', contract.address);
     // console.log('Contract deployment transaction:', contract.deployTransaction);
@@ -38,7 +46,7 @@ async function main() {
     console.log(`Current Favorite number: ${currentFavoriteNumber.toString()}`);
 
     // Store a number
-    const transactionResponse = await contract.store('7');
+    const transactionResponse = await contract.store('45675');
     const transactionReceipt = await transactionResponse.wait(1);
     const updatedFavoriteNumber = await contract.retrieve();
     console.log(`Updated Favorite Number: ${updatedFavoriteNumber}`);

@@ -24,8 +24,31 @@ Add dotenv version ^16.4.5
 yarn add dotenv@^16.4.5
 ```
 
+Compile your code
+
+```
+yarn compile
+```
+
 Run your application
 
 ```
 node deploy.js
 ```
+
+Add .env to .gitignore file to keep it local. Adding it to github will expose sensitive information to everyone
+
+```
+touch .gitignore
+```
+
+Add .env and commit .gitignore to github
+
+
+## Encript environment variables
+
+- Storing environment variables directly in .evn files exposes to others. We can store test accounts details in .evn file but not main account details instead we can encrypt the keys 
+
+Add a file encryptKey.js
+
+
