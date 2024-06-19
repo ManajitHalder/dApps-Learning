@@ -4,19 +4,19 @@
 
 ## Store private key and other sensitive information in .evn file:
 
-- Add .env file
+-   Add .env file
 
-  - Right click New file
-  - open .evn file and add
-  - PRIVATE_KEY='Your private key'
-    - For example PRIVATE_KEY='0x671b3fb68315f12ef5690ff33abb75a542b83d099da7271ba45d2dadd8c406c0'
-  - RPC_URL='Your RPC URL'
-    - For example RPC_URL=http://127.0.0.1:7545
+    -   Right click New file
+    -   open .evn file and add
+    -   PRIVATE_KEY='Your private key'
+        -   For example PRIVATE_KEY='0x671b3fb68315f12ef5690ff33abb75a542b83d099da7271ba45d2dadd8c406c0'
+    -   RPC_URL='Your RPC URL'
+        -   For example RPC_URL=http://127.0.0.1:7545
 
-- Update deploy.js using dotenv and keys
-  - require('dotenv').config;
-  - Use process.env.PRIVATE_KEY instead of using private key directly in code.
-  - Use RPC URL
+-   Update deploy.js using dotenv and keys
+    -   require('dotenv').config;
+    -   Use process.env.PRIVATE_KEY instead of using private key directly in code.
+    -   Use RPC URL
 
 Add dotenv version ^16.4.5
 
@@ -44,10 +44,9 @@ touch .gitignore
 
 Add .env and commit .gitignore to github
 
-
 ## Encript environment variables
 
-Storing environment variables directly in .evn files exposes to others. We can store test accounts details in .evn file but not main account details instead we can encrypt the keys 
+Storing environment variables directly in .evn files exposes to others. We can store test accounts details in .evn file but not main account details instead we can encrypt the keys
 
 Add a file encryptKey.js
 
@@ -75,9 +74,9 @@ Delete your history after running this command for safety:
 history -c
 ```
 
-## Adding prettier and prettier-plugin-solidity packages
+## Adding prettier and prettier-plugin-solidity packages for code formatting
 
-Adding prettier and prettier-plugin-solidity packages to format the files in cases where prettier extension is not used.
+Adding prettier and prettier-plugin-solidity packages to format code.
 
 Add packages prettier and prettier-plugin-solidity
 
@@ -93,7 +92,7 @@ Create a file .prettierrc to add configs. This file will take precedence over de
 touch .prettierrc
 ```
 
-Add formatting instructions for both javascript and solidity files:
+Add code formatting instructions for both javascript and solidity files:
 
 ```
 {
@@ -103,5 +102,3 @@ Add formatting instructions for both javascript and solidity files:
     "singleQuote": false
 }
 ```
-
-
