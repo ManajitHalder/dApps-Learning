@@ -47,8 +47,34 @@ Add .env and commit .gitignore to github
 
 ## Encript environment variables
 
-- Storing environment variables directly in .evn files exposes to others. We can store test accounts details in .evn file but not main account details instead we can encrypt the keys 
+Storing environment variables directly in .evn files exposes to others. We can store test accounts details in .evn file but not main account details instead we can encrypt the keys 
 
 Add a file encryptKey.js
+
+```
+touch encryptKey.js
+```
+
+Run encryptedKey.js
+
+```
+node encryptedKey.js
+```
+
+It will generate .encryptedKey.json. Add the file in .gitignore to avoid it being commited to github.
+
+Now run deploy.js with PRIVATE_KEY_PASSWORD passed in command prompt as shown below:
+
+```
+PRIVATE_KEY_PASSWORD=password node deploy.js
+```
+
+Delete your history after running this command for safety:
+
+```
+history -c
+```
+
+
 
 

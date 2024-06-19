@@ -8,13 +8,13 @@ async function main() {
   // console.log(`Private Key: ${process.env.PRIVATE_KEY}`);
 
   const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-  // const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-  const encryptedJson = fs.readFileSync('./.encryptedKey.json', 'utf8');
-  let wallet = ethers.Wallet.fromEncryptedJsonSync(
-    encryptedJson,
-    process.env.PRIVATE_KEY_PASSWORD
-  );
-  wallet = wallet.connect(provider);
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+  // const encryptedJson = fs.readFileSync('./.encryptedKey.json', 'utf8');
+  // let wallet = ethers.Wallet.fromEncryptedJsonSync(
+  //   encryptedJson,
+  //   process.env.PRIVATE_KEY_PASSWORD
+  // );
+  // wallet = wallet.connect(provider);
 
   const abi = fs.readFileSync('./SimpleStorage_sol_SimpleStorage.abi', 'utf8');
   const binary = fs.readFileSync(
