@@ -92,7 +92,7 @@ Create a file .prettierrc to add configs. This file will take precedence over de
 touch .prettierrc
 ```
 
-Add code formatting instructions for both javascript and solidity files:
+## Add code formatting instructions for both javascript and solidity files:
 
 ```
 {
@@ -101,4 +101,28 @@ Add code formatting instructions for both javascript and solidity files:
     "useTabs": false,
     "singleQuote": false
 }
+```
+
+## Add typescript and ts-node
+
+```
+yarn add typescript ts-node
+```
+
+Check whether ts-node is installed or not:
+
+```
+ts-node --version
+```
+
+If ts-node is not found then install ts-node globally:
+
+```
+yarn global add ts-node
+```
+
+Add fs-extra for typescript:
+
+```
+yarn add @types/fs-extra
 ```
