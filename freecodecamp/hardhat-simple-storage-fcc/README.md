@@ -1,4 +1,4 @@
-### Hardhat Installation and Usage on Mac OS
+# Hardhat Installation and Usage on Mac OS
 
 Creating a hardhat new hardhat project.
 
@@ -38,5 +38,45 @@ yarn hardhat
 Compile hardhat project:
 
 ```
-yarn compile
+yarn hardhat compile
+```
+
+## Code formatting
+
+### Add prettier and prettier-plugin-solidity for code formatting:
+
+```
+yarn add --dev prettier prettier-plugin-solidity
+```
+
+### Add .prettierrc in project directory
+
+```
+touch .prettierrc
+```
+
+### Add following contents to .prettierrc file:
+
+```
+{
+    "tabWidth": 4,
+    "useTabs": false,
+    "semi": false,
+    "singleQuote": false
+}
+```
+
+### Add file .prettierignore and add files in it to ignore formatting for these files:
+
+```
+node_modules
+package.json
+img
+artifacts
+cache
+coverage
+.env
+.*
+README.md
+coverage.json
 ```
