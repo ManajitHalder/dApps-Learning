@@ -41,6 +41,12 @@ Compile hardhat project:
 yarn hardhat compile
 ```
 
+Clean hardhat project will remove aritifacts folder and its contents:
+
+```
+yarn hardhat clean
+```
+
 ## Code formatting
 
 ### Add prettier and prettier-plugin-solidity for code formatting:
@@ -80,3 +86,21 @@ coverage
 README.md
 coverage.json
 ```
+
+### Wokring with deploy.js:
+
+Command to run deploy.js. First command will be enough, but second is more explicit.
+
+```
+yarn hardhat run scripts/deploy.js
+yarn hardhat run scripts/deploy.js --network hardhat
+```
+
+### .env
+
+Add dotenv package:
+
+```
+yarn add --dev dotenv
+```
+
