@@ -8,7 +8,6 @@ async function main() {
         )
         console.log("Deploying contract...")
         const simpleStorage = await SimpleStorageFactory.deploy()
-
         // console.log(network.config)
 
         // Deploy to hardhat network (sepolia)
@@ -24,7 +23,6 @@ async function main() {
         // Interact with SimpleStorage contract
         const currentValue = await simpleStorage.retrieve()
         console.log(`Current value is ${currentValue}`)
-        
 
         // Update current value
         const transactionResponse = await simpleStorage.store(423)

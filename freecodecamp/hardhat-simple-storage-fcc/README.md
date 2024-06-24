@@ -303,6 +303,7 @@ Running 'yarn hardhat' command lists available tasks provided by hardhat.
 _[Writing tasks](https://hardhat.org/hardhat-runner/docs/guides/tasks)_
 
 Write a simple task to get the current block number:
+
 1. Create a folder tasks
 2. Create a java script file block-number.js and define the task
 
@@ -322,3 +323,28 @@ task("block-number", "Prints the current block number").setAction(
 ```
 require("./tasks/block-number")
 ```
+
+# Running network localhost
+
+1. To run deploy.js in localhost first run the local hardhat node in a separate bash shell.
+
+```
+$ yarn hardhat node
+```
+
+2. Add localhost url and chainId details in hardhat.config.js file:
+
+```
+localhost: {
+    url: "http://127.0.0.1:8545/",
+    chainId: 1337,
+},
+```
+
+3. Run and check the transaction on the terminal where node is running.
+
+```
+$ yarn hardhat run scripts/deploy.js --network localhost
+```
+
+# Running tests
