@@ -348,3 +348,99 @@ $ yarn hardhat run scripts/deploy.js --network localhost
 ```
 
 # Running tests
+
+1. Refer the url to understand how to write test cases to test your contract:
+
+-   _[Testing contracts](https://hardhat.org/tutorial/testing-contracts)_
+
+2. Test case example code for SimpleStorage.sol in file test/SimpleStorage.js
+
+SimpleStorage.sol:
+```
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.7;
+
+contract SimpleStorage {
+    uint256 favoriteNumber;
+
+    struct People {
+        uint256 favoriteNumber;
+        string name;
+    }
+
+    People[] public people;
+
+    mapping(string => uint256) nameToFavoriteNumber;
+
+    function store(uint256 _favoriteNumber) public virtual {
+        favoriteNumber = _favoriteNumber;
+    }
+
+    function retrieve() public view returns (uint256) {
+        return favoriteNumber;
+    }
+
+    function addPerson(string calldata _name, uint256 _favoriteNumber) public {
+        nameToFavoriteNumber[_name] = _favoriteNumber;
+        people.push(People(_favoriteNumber, _name));
+    }
+
+    function getFavoriteNumberByName(string calldata _name) public view returns (uint256) {
+        return nameToFavoriteNumber[_name];
+    }
+}
+```
+
+SimpleStorage.js:
+```
+const { ethers } = require("hardhat")
+const { expect, assert } = require("chai")
+
+describe("SimpleStorage", function () {
+    let simpleStorageFactory, simpleStorage
+    beforeEach(async function () {
+        simpleStorageFactory = await ethers.getContractFactory("SimpleStorage")
+        simpleStorage = await simpleStorageFactory.deploy()
+    })
+
+    it("Should start with a favorite number of 0", async function () {
+        const currentNumber = await simpleStorage.retrieve()
+        const expectedNumber = "0"
+        assert.equal(currentNumber.toString(), expectedNumber)
+        expect(currentNumber.toString()).to.equal(expectedNumber)
+        console.log(`Retrieved number is ${currentNumber}`)
+    })
+
+    it("Should update favorite number when store is called", async function () {
+        const expectedNumber = "434"
+        const transactionResponse = await simpleStorage.store(expectedNumber)
+        await transactionResponse.wait(1)
+
+        const currentNumber = await simpleStorage.retrieve()
+        assert.equal(expectedNumber, currentNumber.toString())
+        console.log(`Stored number is ${expectedNumber}`)
+    })
+
+    it("Should add first person and should get the persons favorite number", async function() {
+        const firstPersonName = "Reyansh Halder"
+        const firstPersonFavoriteNumber = "100"
+        const transactionResponse = await simpleStorage.addPerson(firstPersonName, firstPersonFavoriteNumber)
+        await transactionResponse.wait(1)
+
+        const retrievedFavoriteNumber = await simpleStorage.getFavoriteNumberByName(firstPersonName)
+        expect(firstPersonFavoriteNumber).to.equal(retrievedFavoriteNumber.toString())
+        console.log(`${firstPersonName}'s favorite number is ${retrievedFavoriteNumber}`)
+    })
+
+    it("Should add second person and should get the persons favorite number", async function() {
+        const secondPersonName = "Agastya Halder"
+        const secondPersonFavoriteNumber = "200"
+        const transactionResponse = await simpleStorage.addPerson(secondPersonName, secondPersonFavoriteNumber)
+        await transactionResponse.wait(1)
+
+        const retrievedFavoriteNumber = await simpleStorage.getFavoriteNumberByName(secondPersonName)
+        expect(secondPersonFavoriteNumber).to.equal(retrievedFavoriteNumber.toString())
+        console.log(`${secondPersonName}'s favirote number is ${retrievedFavoriteNumber}`)
+    })
+})
+```
