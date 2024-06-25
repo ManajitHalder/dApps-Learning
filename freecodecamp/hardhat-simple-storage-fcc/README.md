@@ -353,9 +353,10 @@ $ yarn hardhat run scripts/deploy.js --network localhost
 
 -   _[Testing contracts](https://hardhat.org/tutorial/testing-contracts)_
 
-2. Test case example code for SimpleStorage.sol in file test/SimpleStorage.js
+2. Write test cases. Test case example code for SimpleStorage.sol in file test/SimpleStorage.js
 
 SimpleStorage.sol:
+
 ```
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
@@ -392,6 +393,7 @@ contract SimpleStorage {
 ```
 
 SimpleStorage.js:
+
 ```
 const { ethers } = require("hardhat")
 const { expect, assert } = require("chai")
@@ -444,3 +446,93 @@ describe("SimpleStorage", function () {
     })
 })
 ```
+
+3. Run test command.
+
+    ```
+    $ yarn hardhat test
+    ```
+
+4. Test command to run only one test:
+
+-   Using grep:
+    Provide a unique word from the test description of the test which you want to run. Suppose unique word in test is "store" and description is "Should update favorite number when store is called", then test command can be written as:
+
+    ```
+    yarn hardhat test grep store
+    ```
+
+-   Using the keyword .only:
+    Write the only test case you want to run using "only" keyword. Test case example and the command to run the only test case:
+
+    Test code example:
+
+    ```
+    it("Should start with a favorite number of 0", async function () {
+       ...
+    })
+
+    it.only("Should update favorite number when store is called", async function () {
+        const expectedNumber = "434"
+        const transactionResponse = await simpleStorage.store(expectedNumber)
+        await transactionResponse.wait(1)
+
+        const currentNumber = await simpleStorage.retrieve()
+        assert.equal(expectedNumber, currentNumber.toString())
+        console.log(`Stored number is ${expectedNumber}`)
+    })
+
+    it("Should add first person and should get the persons favorite number", async function () {
+        ....
+    }
+    ```
+
+    Command:
+
+    ```
+    $ yarn hardhat test
+    ```
+
+# Hardhat Gas Reporter
+
+Gas Usage Analytics for Hardhat
+
+-   Get gas metrics for method calls and deployments on L1 and L2 by running your test suite.
+-   Get national currency costs of deploying and using your contract system.
+-   Output data in multiple formats including text, markdown, reStructuredText and JSON.
+
+_[hardhat-gas-reporter package installation and usage details](https://www.npmjs.com/package/hardhat-gas-reporter)_
+
+Follow the above url to install hardhat-gas-reporter package, configuration in hardhat.config.js and usage.
+
+## Install hardhat-gas-reporter package
+
+```
+$ yarn add hardhat-gas-reporter --dev
+```
+
+## Update hardhat.config.js file with gas reporter changes
+
+-   Update .evn file. Create account in https://pro.coinmarketcap.com/, copy the API key and paste it in .env file.
+
+```
+COINMARKETCAP_API_KEY=sd09fsd09f-sd09f-sd09f-sd09f-sd09fsd09fsd09f
+```
+
+-   Update hardhat.config.js file
+
+```
+const COINMARKET_API_KEY = process.env.COINMARKET_API_KEY
+
+gasReporter: {
+enabled: true,
+outputFile: "gas-report.txt",
+noColors: true,
+currency: "USD",
+coinmarketcap: COINMARKET_API_KEY,
+},
+```
+
+# Solidity Coverage
+
+*[Code coverate for Solidity testing](https://github.com/sc-forks/solidity-coverage)*

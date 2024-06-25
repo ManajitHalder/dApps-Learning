@@ -26,26 +26,80 @@ describe("SimpleStorage", function () {
         console.log(`Stored number is ${expectedNumber}`)
     })
 
-    it("Should add first person and should get the persons favorite number", async function() {
+    it("Should add first person and should get the persons favorite number", async function () {
         const firstPersonName = "Reyansh Halder"
         const firstPersonFavoriteNumber = "100"
-        const transactionResponse = await simpleStorage.addPerson(firstPersonName, firstPersonFavoriteNumber)
+        const transactionResponse = await simpleStorage.addPerson(
+            firstPersonName,
+            firstPersonFavoriteNumber
+        )
         await transactionResponse.wait(1)
 
-        const retrievedFavoriteNumber = await simpleStorage.getFavoriteNumberByName(firstPersonName)
-        expect(firstPersonFavoriteNumber).to.equal(retrievedFavoriteNumber.toString())
-        console.log(`${firstPersonName}'s favorite number is ${retrievedFavoriteNumber}`)
+        const retrievedFavoriteNumber =
+            await simpleStorage.getFavoriteNumberByName(firstPersonName)
+        expect(firstPersonFavoriteNumber).to.equal(
+            retrievedFavoriteNumber.toString()
+        )
+        console.log(
+            `${firstPersonName}'s favorite number is ${retrievedFavoriteNumber}`
+        )
     })
 
-    it("Should add second person and should get the persons favorite number", async function() {
+    it("Should add second person and should get the persons favorite number", async function () {
         const secondPersonName = "Agastya Halder"
         const secondPersonFavoriteNumber = "200"
-        const transactionResponse = await simpleStorage.addPerson(secondPersonName, secondPersonFavoriteNumber)
+        const transactionResponse = await simpleStorage.addPerson(
+            secondPersonName,
+            secondPersonFavoriteNumber
+        )
         await transactionResponse.wait(1)
 
-        const retrievedFavoriteNumber = await simpleStorage.getFavoriteNumberByName(secondPersonName)
-        expect(secondPersonFavoriteNumber).to.equal(retrievedFavoriteNumber.toString())
-        console.log(`${secondPersonName}'s favirote number is ${retrievedFavoriteNumber}`)
+        const retrievedFavoriteNumber =
+            await simpleStorage.getFavoriteNumberByName(secondPersonName)
+        expect(secondPersonFavoriteNumber).to.equal(
+            retrievedFavoriteNumber.toString()
+        )
+        console.log(
+            `${secondPersonName}'s favirote number is ${retrievedFavoriteNumber}`
+        )
+    })
+
+    it("Should add first person and should get the persons favorite number", async function () {
+        const firstPersonName = "Reyansh Halder"
+        const firstPersonFavoriteNumber = "100"
+        const transactionResponse = await simpleStorage.addPerson(
+            firstPersonName,
+            firstPersonFavoriteNumber
+        )
+        await transactionResponse.wait(1)
+
+        const retrievedFavoriteNumber =
+            await simpleStorage.getFavoriteNumberByName(firstPersonName)
+        expect(firstPersonFavoriteNumber).to.equal(
+            retrievedFavoriteNumber.toString()
+        )
+        console.log(
+            `${firstPersonName}'s favorite number is ${retrievedFavoriteNumber}`
+        )
+    })
+
+    it("Should add second person and should get the persons favorite number", async function () {
+        const secondPersonName = "Agastya Halder"
+        const secondPersonFavoriteNumber = "200"
+        const transactionResponse = await simpleStorage.addPerson(
+            secondPersonName,
+            secondPersonFavoriteNumber
+        )
+        await transactionResponse.wait(1)
+
+        const retrievedFavoriteNumber =
+            await simpleStorage.getFavoriteNumberByName(secondPersonName)
+        expect(secondPersonFavoriteNumber).to.equal(
+            retrievedFavoriteNumber.toString()
+        )
+        console.log(
+            `${secondPersonName}'s favirote number is ${retrievedFavoriteNumber}`
+        )
     })
 })
 
