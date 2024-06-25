@@ -1,5 +1,11 @@
 # Hardhat Installation and Usage on Mac OS
 
+[Github link of this project by Patrick Collins & FCC](https://github.com/PatrickAlphaC/hardhat-simple-storage-fcc)
+
+[Github link of this project by Manajit Halder](https://github.com/ManajitHalder/dApps-Learning/tree/main/freecodecamp/hardhat-simple-storage-fcc)
+
+[Best readme.md template](https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
+
 Creating a hardhat new hardhat project.
 
 ```
@@ -535,4 +541,18 @@ coinmarketcap: COINMARKET_API_KEY,
 
 # Solidity Coverage
 
-*[Code coverate for Solidity testing](https://github.com/sc-forks/solidity-coverage)*
+_[Code coverate for Solidity testing](https://github.com/sc-forks/solidity-coverage)_
+
+-   Install solidity-coverage package
+
+```
+$ yarn add solidity-coverage --dev
+```
+
+-   Changes in hardhat.config.js
+
+```
+require("solidity-coverage")
+```
+
+-   Test
