@@ -6,6 +6,7 @@
 pragma solidity ^0.8.24;
 
 import "./PriceConverter.sol";
+import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 
 error NotOwner();
 
@@ -18,8 +19,11 @@ contract FundMe {
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunded;
 
-    constructor() {        
+    AggregatorV3Interface public priceFeed;
+
+    constructor(address priceFeedAddress) {        
         i_owner = msg.sender;
+        priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
     modifier onlyOwner() {
@@ -28,10 +32,18 @@ contract FundMe {
         _;
     }
 
+    receive() external payable {
+        fund();
+    }
+
+    fallback() external payable {
+        fund();
+    }
+
     function fund() public payable {
         // Want to be able to set a minimum fund amount in USD
         // Send some ETH to this contract?
-        require(msg.value.getConversionRate() >= MINIMUM_USD, "Didn't send enough!");
+        require(msg.value.getConversionRate(priceFeed) >= MINIMUM_USD, "Didn't send enough!");
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] += msg.value;
     }
@@ -52,13 +64,5 @@ contract FundMe {
         // call 
         (bool callSuccess, ) = payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess, "call failed");
-    }
-
-    receive() external payable {
-        fund();
-    }
-
-    fallback() external payable {
-        fund();
     }
 }

@@ -5,14 +5,8 @@ import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.so
 
 library PriceConverter {
 
-        // Returns value of 1 eth in USD and converts the result to ETH as wei before returning
-    function getPrice() internal view returns (uint256) {
-        /**
-        * Network: Sepolia
-        * Aggregator: ETH/USD
-        * Address: 0x694AA1769357215DE4FAC081bf1f309aDC325306
-        */
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+        // Returns value of 1 eth in USD and converts the result to WEI before returning
+    function getPrice(AggregatorV3Interface priceFeed) internal view returns (uint256) {
         (
             /*uint80 roundId*/, 
             int256 answer,
@@ -30,8 +24,8 @@ library PriceConverter {
     }
 
     // Converts ETH (Wei) to USD and returns result in ETH as wei
-    function getConversionRate(uint256 ethAmountInWei /* ETH as WEI*/) internal view returns (uint256) {
-        uint256 weiInUSD = getPrice();
+    function getConversionRate(uint256 ethAmountInWei /* ETH as WEI*/, AggregatorV3Interface priceFeed) internal view returns (uint256) {
+        uint256 weiInUSD = getPrice(priceFeed);
         uint256 weiAmountInUSD = (weiInUSD * ethAmountInWei) / 1e18;
 
         return weiAmountInUSD;

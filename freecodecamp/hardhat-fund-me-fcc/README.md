@@ -108,13 +108,13 @@ Adding chainlink contracts command:
 
 # Hardhat deploy
 
-## Details on hardhat-deploy repo: 
+## Details on hardhat-deploy repo:
 
-*[https://www.npmjs.com/package/hardhat-deploy](https://www.npmjs.com/package/hardhat-deploy)*
+_[https://www.npmjs.com/package/hardhat-deploy](https://www.npmjs.com/package/hardhat-deploy)_
 
-## Details on hardhat-deploy-ethers repo: 
+## Details on hardhat-deploy-ethers repo:
 
-*[https://github.com/wighawag/hardhat-deploy-ethers#readme](https://github.com/wighawag/hardhat-deploy-ethers#readme)*
+_[https://github.com/wighawag/hardhat-deploy-ethers#readme](https://github.com/wighawag/hardhat-deploy-ethers#readme)_
 
 ## Hardhat-deploy explanation:
 
@@ -151,4 +151,119 @@ yarn add --dev @nomiclabs/hardhat-ethers hardhat-deploy-ethers ether
     ```
     touch 01-deploy-fund-me.js
     ```
-3. 
+
+## Dealing with different chains
+
+We can't hard code the priceFeed address of a particula network like Sepolia in our contract code (here in FundMe.sol and PriceConverter.sol).
+
+### What happens when we want to change chains?
+
+We make contructor parameterized and pass address of priceFeed instead of hardcoding the address, so that address of different networks can be passed at runtime. Refer files FundMe.sol and PriceConverter.sol.
+
+### How to get priceFeed value while working with localhost or hardhat networks?
+
+When working with localhost or hardhat network we want to use mock. localhost and hardhat network doesn't have priceFeed value. Therefore define a mock solidity file MockV3Aggregator.sol in contracts/test/ folder to define mock priceFeed value for thses local networks so that we can test verything locally.
+
+Github location of MockV3Aggregator.sol:
+
+_[https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/tests/MockV3Aggregator.sol](https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/tests/MockV3Aggregator.sol)_
+
+### Content of helper.hardhat.config.js @ this point:
+
+```
+const networkConfig = {
+    11155111: {
+        name: "Sepolia Testnet",
+        ethUSDPriceFeed: "0x694AA1769357215DE4FAC081bf1f309aDC325306",
+    },
+    43114: {
+        name: "Avalanche Testnet",
+        ethUSDPriceFeed: "0x86d67c3D38D2bCeE722E601025C25a575021c6EA",
+    },
+    1: {
+        name: "Ethereum Mainnet",
+        ethUSDPriceFeed: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
+    },
+}
+
+const developmentChains = ["hardhat", "localhost"]
+
+/*
+constructor(uint8 _decimals, int256 _initialAnswer) {
+    decimals = _decimals;
+    updateAnswer(_initialAnswer);
+  }
+
+  Defining constructor parameters of MockV3Aggregator.sol to be used for our
+  local MockV3Aggregator.sol file.
+*/
+const DECIMALS = 8
+const INITIAL_ANSWER = 200000000000 //2000 + 8 0's = 2000,00000000
+
+module.exports = {
+    networkConfig,
+    developmentChains,
+    DECIMALS,
+    INITIAL_ANSWER,
+}
+```
+
+### Content of 00-deploy-mocks.js file @ this point:
+
+```
+const { network } = require("hardhat")
+const {
+    developmentChains,
+    DECIMALS,
+    INITIAL_ANSWER,
+} = require("../helper.hardhat.config")
+
+module.exports = async ({ getNamedAccounts, deployments }) => {
+    const { deploy, log } = deployments
+    const { deployer } = await getNamedAccounts()
+    // const chainId = network.config.chainId
+
+    if (developmentChains.includes(network.name)) {
+        log("Local network detected! Deploying mocks...")
+        await deploy("MockV3Aggregator", {
+            contract: "MockV3Aggregator",
+            from: deployer,
+            log: true,
+            args: [DECIMALS, INITIAL_ANSWER],
+        })
+        log("Mocks deployed!")
+        log("------------------------------------------------------------")
+    }
+}
+
+module.exports.tags = ["all", "mocks"]
+```
+
+### Content of MockV3Aggregator.sol @ this point:
+
+```
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@chainlink/contracts/src/v0.8/tests/MockV3Aggregator.sol";
+//https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/tests/MockV3Aggregator.sol
+
+```
+
+### Running depoly for local networks (hardhat & localhost) should deploy successfully.
+
+```
+yarn hardhat deploy --tag mocks
+```
+
+```
+yarn run v1.22.22
+warning package.json: No license field
+$ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-fund-me-fcc/node_modules/.bin/hardhat deploy --tags mocks
+Nothing to compile
+Local network detected! Deploying mocks...
+deploying "MockV3Aggregator" (tx: 0x61af512d9700630840bb9ef58ae73424d196e49aa4ca0341b929775fdaeea4b2)...: deployed at 0x5FbDB2315678afecb367f032d93F642f64180aa3 with 694955 gas
+Mocks deployed!
+------------------------------------------------------------
+✨  Done in 3.64s.
+```
