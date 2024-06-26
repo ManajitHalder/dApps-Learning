@@ -47,4 +47,12 @@ module.exports = {
         coinmarketcap: COINMARKET_API_KEY,
         // token: "MATIC",
     },
+    namedAccounts: {
+        deployer: {
+            default: 0,
+        },
+        user: {
+            default: 1,
+        },
+    },
 }

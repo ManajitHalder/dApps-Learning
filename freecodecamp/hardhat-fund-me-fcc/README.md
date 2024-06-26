@@ -108,6 +108,16 @@ Adding chainlink contracts command:
 
 # Hardhat deploy
 
+## Details on hardhat-deploy repo: 
+
+*[https://www.npmjs.com/package/hardhat-deploy](https://www.npmjs.com/package/hardhat-deploy)*
+
+## Details on hardhat-deploy-ethers repo: 
+
+*[https://github.com/wighawag/hardhat-deploy-ethers#readme](https://github.com/wighawag/hardhat-deploy-ethers#readme)*
+
+## Hardhat-deploy explanation:
+
 A Hardhat Plugin For Replicable Deployments And Easy Testing.
 
 This hardhat plugin adds a mechanism to deploy contracts to any network, keeping track of them and replicating the same environment for testing.
@@ -134,7 +144,8 @@ yarn add --dev @nomiclabs/hardhat-ethers hardhat-deploy-ethers ether
 
 ## Start writing deploy scripts
 
-1. Create a folder deploy in project folder.
+1. Create a folder <span style="color:green; font-weight:bold"> deploy </span> in project folder.
+
 2. Name the deploy scripts in increasing number so that they gets executed in order. Like 01-deploy-fund-me.js
 
     ```
