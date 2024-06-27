@@ -267,3 +267,32 @@ Mocks deployed!
 ------------------------------------------------------------
 ✨  Done in 3.64s.
 ```
+
+### Running depoly for test networks (sepolia) should deploy successfully.
+
+```
+yarn hardhat deploy --network sepolia --tags fundme
+```
+
+```
+yarn run v1.22.22
+$ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-fund-me-fcc/node_modules/.bin/hardhat deploy --network sepolia --tags fundme
+Nothing to compile
+deploying "FundMe" (tx: 0x030b85c770ec9b902505994308161f1116d672e791209f92ea8352b102e204c7)...: deployed at 0x0432A306571e4a93C3d65a435afb7f1AC9c480e2 with 811211 gas
+Verifying Contract...
+Successfully submitted source code for contract
+contracts/FundMe.sol:FundMe at 0x0432A306571e4a93C3d65a435afb7f1AC9c480e2
+for verification on the block explorer. Waiting for verification result...
+
+Successfully verified contract FundMe on the block explorer.
+https://sepolia.etherscan.io/address/0x0432A306571e4a93C3d65a435afb7f1AC9c480e2#code
+
+-------------------------------------------------------------
+✨  Done in 84.19s.
+```
+
+# Code formatting
+
+Solidity Style Guide:
+
+_[https://docs.soliditylang.org/en/latest/style-guide.html](https://docs.soliditylang.org/en/latest/style-guide.html)_

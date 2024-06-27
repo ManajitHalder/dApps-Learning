@@ -4,7 +4,8 @@
 // module.exports.default = deployFunc
 
 const { network } = require("hardhat")
-const { networkConfig } = require("../helper.hardhat.config")
+const { networkConfig, developmentChains } = require("../helper.hardhat.config")
+const { verify } = require("../utils/verify")
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments
@@ -13,7 +14,15 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
     // if chainId is A use address B
     // if chainId is C use address D
-    const ethUSDPriceFeedAddress = networkConfig[chainId]["ethUSDPriceFeed"]
+    // const ethUSDPriceFeedAddress = networkConfig[chainId]["ethUSDPriceFeed"]
+
+    let ethUSDPriceFeedAddress
+    if (developmentChains.includes(network.name)) {
+        const ethUSDAggregator = await deployments.get("MockV3Aggregator")
+        ethUSDPriceFeedAddress = ethUSDAggregator.address
+    } else {
+        ethUSDPriceFeedAddress = networkConfig[chainId]["ethUSDPriceFeed"]
+    }
 
     // Question: What happens when we want to change chains
     // Answer: We make contructor parameterized and pass address of priceFeed
@@ -26,4 +35,22 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     // define a mock solidity file MockV3Aggregator.sol in contracts/test/ folder
     // to define mock priceFeed value for thses local networks so that we can test
     // everything locally.
+    let args = [ethUSDPriceFeedAddress]
+    const fundMe = await deploy("FundMe", {
+        from: deployer,
+        args: args,
+        log: true,
+        waitConfirmations: network.config.blockConfirmations || 1,
+    })
+
+    if (
+        !developmentChains.includes(network.name) &&
+        process.env.ETHERSCAN_API_KEY
+    ) {
+        await verify(fundMe.address, args)
+    }
+
+    log("-------------------------------------------------------------")
 }
+
+module.exports.tags = ["all", "fundme"]
