@@ -1,15 +1,16 @@
-// Get funds from users
-// Withdraw funds
-// Set a minimum funding value in USD
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
 import "./PriceConverter.sol";
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 
-error NotOwner();
+error FundMe__NotOwner();
 
+/** @title A contract for crown funding
+ *  @author Manajit Halder
+ *  @notice This contract is to demo a sample funding contract
+ *  @dev This implements price feeds as our library
+ */
 contract FundMe {
     using PriceConverter for uint256;
 
@@ -28,7 +29,7 @@ contract FundMe {
 
     modifier onlyOwner() {
         // require(msg.sender == i_owner, "Only owner can call this function");
-        if (msg.sender != i_owner) { revert NotOwner(); }
+        if (msg.sender != i_owner) { revert FundMe__NotOwner(); }
         _;
     }
 

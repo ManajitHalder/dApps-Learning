@@ -3,6 +3,11 @@ pragma solidity ^0.8.24;
 
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 
+/** @title A contract for price conversion using CCIP price feed
+ *  @author Manajit Halder
+ *  @notice This contract is to calculate price feed using CCIP
+ *  @dev This calculates price feed
+ */
 library PriceConverter {
 
         // Returns value of 1 eth in USD and converts the result to WEI before returning

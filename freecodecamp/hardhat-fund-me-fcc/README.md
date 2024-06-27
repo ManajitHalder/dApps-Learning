@@ -293,6 +293,32 @@ https://sepolia.etherscan.io/address/0x0432A306571e4a93C3d65a435afb7f1AC9c480e2#
 
 # Code formatting
 
-Solidity Style Guide:
+<span style="color:orange; font-weight:bold">Solidity Style Guide</span>
 
 _[https://docs.soliditylang.org/en/latest/style-guide.html](https://docs.soliditylang.org/en/latest/style-guide.html)_
+
+<span style="color:orange; font-weight:bold">Order of Functions</span>
+
+Ordering helps readers identify which functions they can call and to find the constructor and fallback definitions easier.
+
+Functions should be grouped according to their visibility and ordered:
+
+1. constructor
+2. receive function (if exists)
+3. fallback function (if exists)
+4. external
+5. public
+6. internal
+7. private
+
+Within a grouping, place the view and pure functions last.
+
+<span style="color:orange; font-weight:bold">NatSpec Format</span>
+
+_[https://docs.soliditylang.org/en/latest/natspec-format.html](https://docs.soliditylang.org/en/latest/natspec-format.html)_
+
+<span style="color:orange; font-weight:bold">Command to generate documentation</sapn>
+
+```
+solc --userdoc --devdoi ex1. sol
+```
