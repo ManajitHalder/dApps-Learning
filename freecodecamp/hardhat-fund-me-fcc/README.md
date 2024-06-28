@@ -291,6 +291,209 @@ https://sepolia.etherscan.io/address/0x0432A306571e4a93C3d65a435afb7f1AC9c480e2#
 ✨  Done in 84.19s.
 ```
 
+### Contents of hardhat.config.js after deploy changes
+
+```
+require("@nomicfoundation/hardhat-toolbox")
+require("dotenv").config()
+require("@nomicfoundation/hardhat-verify")
+require("hardhat-gas-reporter")
+require("solidity-coverage")
+require("hardhat-deploy")
+
+const SEPOLIA_RPC_URL =
+    process.env.SEPOLIA_RPC_URL ||
+    "https://eth-sepolia.g.alchemy.com/v2/your-api-key"
+const PRIVATE_KEY = process.env.PRIVATE_KEY || ""
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
+const COINMARKET_API_KEY = process.env.COINMARKET_API_KEY || ""
+
+/** @type import('hardhat/config').HardhatUserConfig */
+module.exports = {
+    defaultNetwork: "hardhat",
+    networks: {
+        hardhat: {
+            chainId: 1337,
+        },
+        sepolia: {
+            url: SEPOLIA_RPC_URL,
+            accounts: [PRIVATE_KEY],
+            chainId: 11155111,
+            blockConfirmations: 6,
+        },
+        localhost: {
+            url: "http://127.0.0.1:8545/",
+            chainId: 1337,
+        },
+    },
+    solidity: {
+        compilers: [
+            {
+                version: "0.8.24",
+            },
+            {
+                version: "0.8.0",
+            },
+        ],
+    },
+    etherscan: {
+        apiKey: ETHERSCAN_API_KEY,
+    },
+    gasReporter: {
+        enabled: false,
+        outputFile: "gas-report.txt",
+        noColors: true,
+        currency: "INR",
+        coinmarketcap: COINMARKET_API_KEY,
+        // token: "MATIC",
+    },
+    namedAccounts: {
+        deployer: {
+            default: 0,
+        },
+        user: {
+            default: 1,
+        },
+    },
+}
+```
+
+### Contents of helper.hardhat.config.js after deploy changes
+
+```
+const networkConfig = {
+    11155111: {
+        name: "Sepolia Testnet",
+        ethUSDPriceFeed: "0x694AA1769357215DE4FAC081bf1f309aDC325306",
+    },
+    43114: {
+        name: "Avalanche Testnet",
+        ethUSDPriceFeed: "0x86d67c3D38D2bCeE722E601025C25a575021c6EA",
+    },
+    1: {
+        name: "Ethereum Mainnet",
+        ethUSDPriceFeed: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
+    },
+    31337: {
+        name: "localhost",
+    },
+}
+
+const developmentChains = ["hardhat", "localhost"]
+
+/*
+constructor(uint8 _decimals, int256 _initialAnswer) {
+    decimals = _decimals;
+    updateAnswer(_initialAnswer);
+  }
+
+  Defining constructor parameters of MockV3Aggregator.sol to be used for our
+  local MockV3Aggregator.sol file.
+*/
+const DECIMALS = 8
+const INITIAL_ANSWER = 200000000000 //2000 + 8 0's = 2000,00000000
+
+module.exports = {
+    networkConfig,
+    developmentChains,
+    DECIMALS,
+    INITIAL_ANSWER,
+}
+```
+
+### Contents of 00-deploy-mocks.js after deploy changes
+
+```
+const { network } = require("hardhat")
+const {
+    developmentChains,
+    DECIMALS,
+    INITIAL_ANSWER,
+} = require("../helper.hardhat.config")
+
+module.exports = async ({ getNamedAccounts, deployments }) => {
+    const { deploy, log } = deployments
+    const { deployer } = await getNamedAccounts()
+    const chainId = network.config.chainId
+
+    // if (chainId == 31337) {
+    if (developmentChains.includes(network.name)) {
+        log("Local network detected! Deploying mocks...")
+        await deploy("MockV3Aggregator", {
+            contract: "MockV3Aggregator",
+            from: deployer,
+            log: true,
+            args: [DECIMALS, INITIAL_ANSWER],
+        })
+        log("Mocks deployed!")
+        log("------------------------------------------------------------")
+    }
+}
+
+module.exports.tags = ["all", "mocks"]
+```
+
+### 01-deploy-fund-me.js changes after deploy changes
+
+```
+// function deployFunc(hre) {
+//     console.log("I am deployed...")
+// }
+// module.exports.default = deployFunc
+
+const { network } = require("hardhat")
+const { networkConfig, developmentChains } = require("../helper.hardhat.config")
+const { verify } = require("../utils/verify")
+
+module.exports = async ({ getNamedAccounts, deployments }) => {
+    const { deploy, log } = deployments
+    const { deployer } = await getNamedAccounts()
+    const chainId = network.config.chainId
+
+    // if chainId is A use address B
+    // if chainId is C use address D
+    // const ethUSDPriceFeedAddress = networkConfig[chainId]["ethUSDPriceFeed"]
+
+    let ethUSDPriceFeedAddress
+    if (developmentChains.includes(network.name)) {
+        const ethUSDAggregator = await deployments.get("MockV3Aggregator")
+        ethUSDPriceFeedAddress = ethUSDAggregator.address
+    } else {
+        ethUSDPriceFeedAddress = networkConfig[chainId]["ethUSDPriceFeed"]
+    }
+
+    // Question: What happens when we want to change chains
+    // Answer: We make contructor parameterized and pass address of priceFeed
+    // instead of hardcoding the address, so that address of different networks
+    // can be passed at runtime.
+
+    // When working with localhost or hardhat network we want to use mock.
+    // Created 00-deploy-mocks.js
+    // localhost and hardhat network doesn't have priceFeed value. Therefore
+    // define a mock solidity file MockV3Aggregator.sol in contracts/test/ folder
+    // to define mock priceFeed value for thses local networks so that we can test
+    // everything locally.
+    let args = [ethUSDPriceFeedAddress]
+    const fundMe = await deploy("FundMe", {
+        from: deployer,
+        args: args,
+        log: true,
+        waitConfirmations: network.config.blockConfirmations || 1,
+    })
+
+    if (
+        !developmentChains.includes(network.name) &&
+        process.env.ETHERSCAN_API_KEY
+    ) {
+        await verify(fundMe.address, args)
+    }
+
+    log("-------------------------------------------------------------")
+}
+
+module.exports.tags = ["all", "fundme"]
+```
+
 # Code formatting
 
 <span style="color:orange; font-weight:bold">Solidity Style Guide</span>
@@ -320,5 +523,5 @@ _[https://docs.soliditylang.org/en/latest/natspec-format.html](https://docs.soli
 <span style="color:orange; font-weight:bold">Command to generate documentation</sapn>
 
 ```
-solc --userdoc --devdoi ex1. sol
+solc --userdoc --devdoi FundMe.sol
 ```

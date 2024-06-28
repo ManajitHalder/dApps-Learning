@@ -21,6 +21,7 @@
     "typechain": "^8.3.0"
   },
   "dependencies": {
+    "solc": "^0.8.26",
     "solhint": "^5.0.1"
   }
 }
