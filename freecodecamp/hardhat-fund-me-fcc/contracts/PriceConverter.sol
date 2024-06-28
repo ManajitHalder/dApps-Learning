@@ -31,9 +31,9 @@ library PriceConverter {
      *  @dev uses Sepolia testnet's address
      *  @return version ofAggregatorV3Interface 
      */
-    function getVersion() internal view returns (uint256) {
-        return AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306).version();
-    }
+    // function getVersion() internal view returns (uint256) {
+    //     return AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306).version();
+    // }
 
     /** @notice Converts ETH (Wei) to USD and returns result in ETH as wei
      *  @dev ethAmountInWei amount of Wei 

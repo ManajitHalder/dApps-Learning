@@ -6,6 +6,7 @@ describe("FundMe", async () => {
     let fundMe
     let deployer
     let mockV3Aggregator
+    const sendValue = ethers.parseEther("1") // 1 eth
 
     beforeEach(async () => {
         // deploy FundMe contract using hardhat deploy
@@ -33,10 +34,11 @@ describe("FundMe", async () => {
 
     // To test the contructor only
     describe("constructor", async () => {
-        it("sets the aggregator address correctly", async () => {
+        it("Sets the aggregator address correctly", async () => {
             const response = await fundMe.priceFeed()
-            // console.log(`response ${response}`)
-            // console.log(`mockV3Aggregator address ${mockV3Aggregator.target}`)
+            console.log(
+                `response address ${response} \nmockV3Aggregator address ${mockV3Aggregator.target}`
+            )
             assert.equal(response, mockV3Aggregator.target)
         })
     })
@@ -44,8 +46,30 @@ describe("FundMe", async () => {
     describe("fund", async () => {
         it("Fails if you don't send enough ETH", async () => {
             await expect(fundMe.fund()).to.be.revertedWith(
-                "You need to spend more ETH!"
+                "Didn't send enough ETH!"
             )
         })
+
+        it("Updated the amount funded data structure", async () => {
+            await fundMe.fund({ value: sendValue })
+            const response = await fundMe.addressToAmountFunded(deployer)
+            console.log(
+                `SendValue amount: ${sendValue} \nFunded amount: ${response}`
+            )
+            expect(response.toString()).to.equal(sendValue.toString())
+        })
+
+        it("Adds funder to an array of funders", async () => {
+            await fundMe.fund({ value: sendValue })
+            const funder = await fundMe.funders(0)
+            console.log(
+                `funder with address: ${funder} added to funders array \ndeployer with address: ${deployer}`
+            )
+            expect(funder.toString()).to.equal(deployer.toString())
+        })
+    })
+
+    describe("withdraw", async () => {
+        
     })
 })

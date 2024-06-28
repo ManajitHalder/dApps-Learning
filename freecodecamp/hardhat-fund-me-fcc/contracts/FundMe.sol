@@ -55,7 +55,7 @@ contract FundMe {
     function fund() public payable {
         // Want to be able to set a minimum fund amount in USD
         // Send some ETH to this contract?
-        require(msg.value.getConversionRate(priceFeed) >= MINIMUM_USD, "Didn't send enough!");
+        require(msg.value.getConversionRate(priceFeed) >= MINIMUM_USD, "Didn't send enough ETH!");
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] += msg.value;
     }
