@@ -1,9 +1,12 @@
 require("@nomicfoundation/hardhat-toolbox")
 require("dotenv").config()
 require("@nomicfoundation/hardhat-verify")
+require("@nomicfoundation/hardhat-ethers")
 require("hardhat-gas-reporter")
 require("solidity-coverage")
 require("hardhat-deploy")
+require("hardhat-deploy-ethers")
+require("@nomicfoundation/hardhat-chai-matchers")
 
 const SEPOLIA_RPC_URL =
     process.env.SEPOLIA_RPC_URL ||

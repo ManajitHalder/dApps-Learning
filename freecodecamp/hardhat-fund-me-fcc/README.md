@@ -525,3 +525,14 @@ _[https://docs.soliditylang.org/en/latest/natspec-format.html](https://docs.soli
 ```
 solc --userdoc --devdoi FundMe.sol
 ```
+
+# Testing
+
+Unit test and Staging test
+
+## Unit Test
+
+Create folders <span style="color:green; font-weight:bold">unit</span> and <span style="color:green; font-weight:bold">staging</span> insice test folder.
+
+Create file <span style="color:green; font-weight:bold">FundMe.test.js</span> inside unit folder.
+
