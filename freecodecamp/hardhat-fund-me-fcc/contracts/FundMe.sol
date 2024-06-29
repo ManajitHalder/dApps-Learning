@@ -30,24 +30,24 @@ contract FundMe {
     }
 
     modifier onlyOwner() {
-        // require(msg.sender == i_owner, "Only owner can call this function");
+        // require(msg.sender == i_owner, "Only owner can withdraw fund");
         if (msg.sender != i_owner) { revert FundMe__NotOwner(); }
         _;
     }
 
-    /** @notice Receives fund when msg.data is empty
-     *  @dev Called when no other function matches with contract function
-     */
-    receive() external payable {
-        fund();
-    }
+    // /** @notice Receives fund when msg.data is empty
+    //  *  @dev Called when no other function matches with contract function
+    //  */
+    // receive() external payable {
+    //     fund();
+    // }
 
-    /** @notice Receives fund when msg.data is not empty
-     *  @dev Called when no other function matches with contract function
-     */
-    fallback() external payable {
-        fund();
-    }
+    // /** @notice Receives fund when msg.data is not empty
+    //  *  @dev Called when no other function matches with contract function
+    //  */
+    // fallback() external payable {
+    //     fund();
+    // }
 
     /** @notice This function receives fund from anyone
      *  @dev Function maintain funders list
