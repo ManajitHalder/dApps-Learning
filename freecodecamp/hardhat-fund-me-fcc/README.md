@@ -295,6 +295,7 @@ If you get insufficient error or need more funds to deploy then get it from url:
 
 ```
 https://cloud.google.com/application/web3/faucet/ethereum/sepolia
+https://faucets.chain.link/
 ```
 
 ### Contents of hardhat.config.js after deploy changes
@@ -788,3 +789,65 @@ AggregatorV3Interface public s_priceFeed;
 ```
 
 ## Staging Test
+
+Create a file FundMe.staging.test.js in folder test/staging and add the content:
+
+```
+const { getNamedAccounts, network, ethers } = require("hardhat")
+const { developmentChains } = require("../../helper.hardhat.config")
+const { expect } = require("chai")
+
+developmentChains.includes(network.name)
+    ? describe.skip
+    : describe("FundMe Staging Test", async () => {
+          let fundMe
+          let deployer
+          const sendValue = ethers.parseEther("0.1") // 0.1 ETH
+          beforeEach(async () => {
+              deployer = (await getNamedAccounts()).deployer
+              fundMe = await ethers.getContract("FundMe", deployer)
+          })
+
+          it("Fund and Withdraw: Allows people to fund and withdraw", async () => {
+              const fundTxResponse = await fundMe.fund({ value: sendValue })
+              await fundTxResponse.wait(1)
+              const withdrawTxResponse = await fundMe.withdraw()
+              await withdrawTxResponse.wait(1)
+
+              const endingBalance = await ethers.provider.getBalance(
+                  fundMe.target
+              )
+              console.log(`Ending balance: ${endingBalance}`)
+              expect(endingBalance.toString()).to.be.equal("0")
+          })
+      })
+```
+
+Command to run staging test:
+
+```
+yarn hardhat test --network sepolia
+```
+
+Output:
+
+```
+yarn test:staging
+yarn run v1.22.22
+warning ../package.json: No license field
+$ yarn hardhat test --network sepolia
+warning ../package.json: No license field
+$ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-fund-me-fcc/node_modules/.bin/hardhat test --network sepolia
+
+  FundMe Staging Test
+Ending balance: 0
+
+
+    ✔ Fund and Withdraw: Allows people to fund and withdraw (48823964 gas)
+
+
+  1 passing (8m)
+
+✨  Done in 488.90s.
+```
+
