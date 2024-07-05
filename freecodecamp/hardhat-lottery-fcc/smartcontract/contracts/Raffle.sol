@@ -58,6 +58,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     event RequestedRaffleWinner(uint256 indexed requrestId);
     event WinnerPicked(address indexed winner);
 
+    /* Functions */
     constructor(
         uint256 entranceFee, 
         address vrfCoordinatorV2, 
@@ -113,8 +114,8 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     /** 
      * @dev This function is triggered after checkUpkeep returns true for upkeepNeeded. This function
      * will be executed onchain unlike checkUpkeep() function which is executed offchain.
-     * The chainlink perform actual computation here. In this it is getting random word using chainlink
-     * VRF.
+     * The chainlink perform actual computation here, getting random word using chainlink VRF to get a
+     * random winner.
      */
     function performUpkeep(bytes calldata /* performData */) external override {
         (bool upkeepNeeded, ) = checkUpkeep("");
@@ -133,6 +134,9 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         emit RequestedRaffleWinner(requestId);
     }
 
+    /**
+     * @dev This function is called by Chainlink VRF to send money to the random winner.
+     */
     function fulfillRandomWords(
         uint256 /* requestId */, 
         uint256[] memory randomWords) internal override 
@@ -151,6 +155,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         emit WinnerPicked(recentWinner);
     }
 
+    /* Getter functions */
     function getEntranceFee() public view returns (uint256) {
         return i_entranceFee;
     }
@@ -175,8 +180,12 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         return s_players.length;
     }
 
-    function getLatestTimestamp() public view returns (uint256) {
+    function getLastTimestamp() public view returns (uint256) {
         return s_lastBlockTimestamp;
+    }
+
+    function getInterval() public view returns (uint256) {
+        return i_entranceFee;
     }
 
     function getRequestConfirmations() public pure returns (uint256) {
