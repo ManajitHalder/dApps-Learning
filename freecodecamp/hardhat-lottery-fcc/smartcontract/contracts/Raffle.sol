@@ -60,8 +60,8 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
     /* Functions */
     constructor(
-        uint256 entranceFee, 
         address vrfCoordinatorV2, 
+        uint256 entranceFee, 
         bytes32 gasLane, 
         uint64 subscriptionId,
         uint32 callbackGasLimit,
@@ -69,8 +69,8 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         ) VRFConsumerBaseV2(vrfCoordinatorV2) 
     {
         // Chainlink VRF
-        i_entranceFee = entranceFee;
         i_vrfCoordinator = VRFCoordinatorV2Interface(vrfCoordinatorV2);
+        i_entranceFee = entranceFee;
         i_gasLane = gasLane;            
         i_subscriptionId = subscriptionId;
         i_callbackGasLimit = callbackGasLimit;
