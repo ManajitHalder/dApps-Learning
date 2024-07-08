@@ -7,17 +7,17 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deployer } = getNamedAccounts()
     const chainId = network.config.chainId
     let vrfCoordinatorV2Address, subscriptionId, vrfCoordinatorV2Mock
-    const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.parseEther("30")
+    const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.parseEther("1")
 
-    if (developmentChains.includes(network.name)) {
+    if (chainId == 31337) {
         // For hardhat or localhost
         vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
-        vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
+        vrfCoordinatorV2Address = vrfCoordinatorV2Mock.target
         const transactionResponse = await vrfCoordinatorV2Mock.createSubscription()
-        const transactionReceipt = await transactionResponse.wait(1)
+        const transactionReceipt = await transactionResponse.wait()
         // subscriptionId = transactionReceipt.events[0].args.subId
 
-        console.log("Parsing the event log:")
+        // console.log("Parsing the event log:")
         // Find the SubscriptionCreated event
         const parsedLogs = transactionReceipt.logs.map((log) =>
             vrfCoordinatorV2Mock.interface.parseLog(log),
@@ -28,23 +28,26 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         )
 
         if (subscriptionCreatedEvent) {
-            console.log("subscriptionCreatedEvent: ", subscriptionCreatedEvent)
+            // console.log("subscriptionCreatedEvent: ", subscriptionCreatedEvent)
             // Accessing the subId correctly based on the event structure
-            const subID = subscriptionCreatedEvent.args.subId.toString()
-            console.log("Subscription ID:", subID) // Ensure to convert to string if necessary
+            const subID = subscriptionCreatedEvent.args.subId
+            // console.log("Subscription ID:", subID) // Ensure to convert to string if necessary
 
             // Optionally, convert to number if needed
-            subscriptionId = parseInt(subID.toString())
-            console.log("Subscription ID (as number):", subscriptionId)
+            // subscriptionId = parseInt(subID.toString())
+            subscriptionId = subID
+            // console.log("Subscription ID (as number):", subscriptionId)
         } else {
             console.error("SubscriptionCreated event not found or parsed incorrectly.")
         }
 
-        console.log("Subscription ID before findSubscription:", subscriptionId)
+        // console.log("Subscription ID before findSubscription:", subscriptionId)
         // Fund the subscription
         await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, VRF_SUBSCRIPTION_FUND_AMOUNT)
+        // console.log("fundSubscription called")
     } else {
         // For real testnet
+        console.log("Testing testnet Sepolia")
         vrfCoordinatorV2Address = networkConfig[chainId]["vrfCoordinatorV2"]
         subscriptionId = networkConfig[chainId]["subscriptionId"]
     }
@@ -63,12 +66,23 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         interval,
     ]
 
+    // console.log("Before calling deploy Raffle", args)
+    // const Raffle = await ethers.getContractFactory("Raffle")
+    // const raffle = await Raffle.deploy(
+    //     vrfCoordinatorV2Address,
+    //     entranceFee,
+    //     gasLane,
+    //     subscriptionId,
+    //     callbackGasLimit,
+    //     interval,
+    // )
     const raffle = await deploy("Raffle", {
         from: deployer,
-        args: args,
         log: true,
+        args: args,
         waitConfirmations: network.config.blockConfirmations || 1,
     })
+    // console.log("After calling deploy Raffle")
 
     // Verify on real network
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
@@ -79,4 +93,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log("----------------------------------------------------------")
 }
 
-module.exports.tags = ["raffle", "all"]
+module.exports.tags = ["all", "raffle"]

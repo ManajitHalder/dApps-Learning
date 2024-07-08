@@ -1,8 +1,8 @@
 // Feature provided by the contract:
 // -   User the participates the lottery by paying some amount
 // -   Lottery picks a random winner (varifiable random winner by using Chainlink VRF)
-// -   Winner to be selected at certian interval (minutes/days/months/etc) using completely automated mechanism.
-// -   Contract uses Chainlink Oracles for Randomness (VRF) and Automated execution (Keeprs)
+// -   Winner to be selected at certian interval (minutes/days/months/etc) using completely automated process.
+// -   Contract uses Chainlink Oracles for Randomness (VRF) and Automated execution (Automation)
 
 // Refer the following url for Chainlink VRF:
 // -   https://docs.chain.link/vrf/v2/subscription/examples/get-a-random-number
@@ -41,7 +41,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     VRFCoordinatorV2Interface private immutable i_vrfCoordinator;
     bytes32 private immutable i_gasLane; //keyHash
     uint64 private immutable i_subscriptionId;
-    uint16 private constant REQUEST_CONFIRMATIONS = 3;
+    uint16 private constant MINIMUM_REQUEST_CONFIRMATIONS = 3;
     uint32 private immutable i_callbackGasLimit;
     uint32 private constant NUM_WORDS = 1;
 
@@ -126,7 +126,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         uint256 requestId = i_vrfCoordinator.requestRandomWords(
             i_gasLane,
             i_subscriptionId,
-            REQUEST_CONFIRMATIONS,
+            MINIMUM_REQUEST_CONFIRMATIONS,
             i_callbackGasLimit,
             NUM_WORDS
         );
@@ -185,10 +185,10 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     }
 
     function getInterval() public view returns (uint256) {
-        return i_entranceFee;
+        return i_interval;
     }
 
     function getRequestConfirmations() public pure returns (uint256) {
-        return REQUEST_CONFIRMATIONS;
+        return MINIMUM_REQUEST_CONFIRMATIONS;
     }
 }
