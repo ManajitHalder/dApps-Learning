@@ -6,9 +6,11 @@
 
 // Refer the following url for Chainlink VRF:
 // -   https://docs.chain.link/vrf/v2/subscription/examples/get-a-random-number
+// -   Function for VRF: requestRandomWords(/* , , , , */) and fulfillRandomWords(/* , */)
 
 // Refer the following url for Chainlink Automation:
 // -   https://docs.chain.link/chainlink-automation/guides/compatible-contracts
+// -   Function for Automation: checkUpkeep(/* */) and performUpkeep(/* */)
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
@@ -100,15 +102,18 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
      */
     function checkUpkeep(
         bytes memory /* checkData */
-    ) public view override returns (
+    ) public override returns (
         bool upkeepNeeded, 
-        bytes memory /* performData */) {
+        bytes memory performData) {
+            bool isOpen = (s_raffleState == RaffleState.OPEN);
             bool timepassed =  ((block.timestamp - s_lastBlockTimestamp) > i_interval);
             bool hasPlayers = (s_players.length > 0);
             bool hasBalance = (address(this).balance > 0);
-            bool isOpen = (s_raffleState == RaffleState.OPEN);
             
-            upkeepNeeded = (timepassed && hasPlayers && hasBalance && isOpen);
+            upkeepNeeded = (isOpen && timepassed && hasPlayers && hasBalance);
+            performData = "";
+            
+            return (upkeepNeeded, performData);
     }
 
     /** 
