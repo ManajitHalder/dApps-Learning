@@ -390,3 +390,95 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     }
 }
 ```
+
+_______________________________________________________________________________________________
+## New learnings
+
+# Event handling in .js file
+
+
+_______________________________________________________________________________________________
+## Errors and Solutions
+
+### Error: 
+- Error while deploying contract:
+
+```
+yarn hardhat deploy
+```
+
+### Problem: 
+- Problem in calling getNamedAccounts(). getNamedAccounts() is an asynchronous function. Need to call using await.
+
+```
+module.exports = async ({ getNamedAccounts, deployments }) => {
+    const { deploy, log } = deployments
+    const { deployer } = getNamedAccounts()
+    const chainId = network.config.chainId
+    let vrfCoordinatorV2Address, subscriptionId, vrfCoordinatorV2Mock
+    const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.parseEther("1")
+```
+
+Error:
+
+```
+$ yarn hardhat deploy
+yarn run v1.22.22
+$ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/.bin/hardhat deploy
+Nothing to compile
+Local network detected! Deploying mocks...
+deploying "VRFCoordinatorV2Mock" (tx: 0xd7c7dc9cc8ab82f01de02b3626f98c1f7d928b1f9f89c9129efc145d07f02ab6)...: deployed at 0x5FbDB2315678afecb367f032d93F642f64180aa3 with 2967891 gas
+Mocks Deployed...
+-----------------------------------------------------
+An unexpected error occurred:
+
+Error: ERROR processing /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/deploy/01-deploy-raffle.js:
+TypeError: Cannot read properties of undefined (reading 'length')
+    at getFrom (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/helpers.ts:1656:14)
+    at fetchIfDifferent (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/helpers.ts:834:34)
+    at _deployOne (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/helpers.ts:913:24)
+    at DeploymentsManager.executeDeployScripts (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1215:19)
+    at DeploymentsManager.runDeploy (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1061:5)
+    at SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/index.ts:450:5)
+    at Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:359:14)
+    at Environment.run (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:192:14)
+    at SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/index.ts:601:32)
+    at Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:359:14)
+    at Environment.run (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:192:14)
+    at SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/index.ts:690:5)
+    at Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:359:14)
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
+
+### Solution:
+
+Problem in 01-deploy-raffle.js file:
+
+```
+module.exports = async ({ getNamedAccounts, deployments }) => {
+    const { deploy, log } = deployments
+    const { deployer } = await getNamedAccounts()
+    const chainId = network.config.chainId
+    let vrfCoordinatorV2Address, subscriptionId, vrfCoordinatorV2Mock
+    const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.parseEther("1")
+```
+
+Problem: 
+- getNamedAccounts() is an asynchronous function, need to wait using await while calling it.
+
+### Output after Solution:
+
+```
+$ yarn hardhat deploy
+yarn run v1.22.22
+$ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/.bin/hardhat deploy
+Nothing to compile
+Local network detected! Deploying mocks...
+deploying "VRFCoordinatorV2Mock" (tx: 0xd7c7dc9cc8ab82f01de02b3626f98c1f7d928b1f9f89c9129efc145d07f02ab6)...: deployed at 0x5FbDB2315678afecb367f032d93F642f64180aa3 with 2967891 gas
+Mocks Deployed...
+-----------------------------------------------------
+deploying "Raffle" (tx: 0x1893be130571d5f34ec168a7be6ec0a638f627576f24201bc81df03ab2f1b4cf)...: deployed at 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 with 1212096 gas
+----------------------------------------------------------
+✨  Done in 2.98s.
+```

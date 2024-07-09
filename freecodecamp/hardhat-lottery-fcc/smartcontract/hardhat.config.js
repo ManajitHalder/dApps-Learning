@@ -13,9 +13,9 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY || ""
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
 const COINMARKET_API_KEY = process.env.COINMARKET_API_KEY || ""
 
-const HARDHAT_CHAIN_ID = Number(process.env.HARDHAT_CHAIN_ID) || 31337
-const SEPOLIA_CHAIN_ID = Number(process.env.SEPOLIA_CHAIN_ID) || 11155111
-const LOCALHOST_CHAIN_ID = Number(process.env.LOCALHOST_CHAIN_ID) || 1337
+// const HARDHAT_CHAIN_ID = Number(process.env.HARDHAT_CHAIN_ID) || 31337
+// const SEPOLIA_CHAIN_ID = Number(process.env.SEPOLIA_CHAIN_ID) || 11155111
+// const LOCALHOST_CHAIN_ID = Number(process.env.LOCALHOST_CHAIN_ID) || 1337
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -40,7 +40,6 @@ module.exports = {
     namedAccounts: {
         deployer: {
             default: 0,
-            1: 0,
         },
         player: {
             default: 1,

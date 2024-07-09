@@ -4,17 +4,18 @@ const { verify } = require("../utils/verify")
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments
-    const { deployer } = getNamedAccounts()
+    const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
     let vrfCoordinatorV2Address, subscriptionId, vrfCoordinatorV2Mock
-    const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.parseEther("1")
+    const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.parseEther("30")
 
-    if (chainId == 31337) {
+    // if (chainId == 31337) {
+    if (developmentChains.includes(network.name)) {
         // For hardhat or localhost
         vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.target
         const transactionResponse = await vrfCoordinatorV2Mock.createSubscription()
-        const transactionReceipt = await transactionResponse.wait()
+        const transactionReceipt = await transactionResponse.wait(1)
         // subscriptionId = transactionReceipt.events[0].args.subId
 
         // console.log("Parsing the event log:")
@@ -30,12 +31,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         if (subscriptionCreatedEvent) {
             // console.log("subscriptionCreatedEvent: ", subscriptionCreatedEvent)
             // Accessing the subId correctly based on the event structure
-            const subID = subscriptionCreatedEvent.args.subId
+            subscriptionId = subscriptionCreatedEvent.args.subId
             // console.log("Subscription ID:", subID) // Ensure to convert to string if necessary
 
             // Optionally, convert to number if needed
             // subscriptionId = parseInt(subID.toString())
-            subscriptionId = subID
+            // subscriptionId = subID
             // console.log("Subscription ID (as number):", subscriptionId)
         } else {
             console.error("SubscriptionCreated event not found or parsed incorrectly.")
@@ -78,8 +79,8 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     // )
     const raffle = await deploy("Raffle", {
         from: deployer,
-        log: true,
         args: args,
+        log: true,
         waitConfirmations: network.config.blockConfirmations || 1,
     })
     // console.log("After calling deploy Raffle")
