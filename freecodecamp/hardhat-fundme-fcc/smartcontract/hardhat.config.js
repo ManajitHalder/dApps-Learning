@@ -10,7 +10,7 @@ require("@nomicfoundation/hardhat-chai-matchers")
 
 const SEPOLIA_RPC_URL =
     process.env.SEPOLIA_RPC_URL ||
-    "https://eth-sepolia.g.alchemy.com/v2/your-api-key"
+    "https://eth-sepolia.g.alchemy.com/v2/P1KIhRkvzxF_FV_OTzkAHZYMLqdPTKCt"
 const PRIVATE_KEY = process.env.PRIVATE_KEY || ""
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
 const COINMARKET_API_KEY = process.env.COINMARKET_API_KEY || ""
