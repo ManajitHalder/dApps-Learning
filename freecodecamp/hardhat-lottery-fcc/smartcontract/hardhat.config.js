@@ -37,6 +37,12 @@ module.exports = {
             blockConfirmations: 6,
         },
     },
+    gasReporter: {
+        enabled: false,
+        currency: "INR",
+        outputFile: "gas-report.txt",
+        noColors: true,
+    },
     namedAccounts: {
         deployer: {
             default: 0,

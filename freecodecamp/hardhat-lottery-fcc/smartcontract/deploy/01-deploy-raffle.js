@@ -18,7 +18,6 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         const transactionReceipt = await transactionResponse.wait(1)
         // subscriptionId = transactionReceipt.events[0].args.subId
 
-        // console.log("Parsing the event log:")
         // Find the SubscriptionCreated event
         const parsedLogs = transactionReceipt.logs.map((log) =>
             vrfCoordinatorV2Mock.interface.parseLog(log),
@@ -29,20 +28,13 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         )
 
         if (subscriptionCreatedEvent) {
-            // console.log("subscriptionCreatedEvent: ", subscriptionCreatedEvent)
             // Accessing the subId correctly based on the event structure
             subscriptionId = subscriptionCreatedEvent.args.subId
             // console.log("Subscription ID:", subID) // Ensure to convert to string if necessary
-
-            // Optionally, convert to number if needed
-            // subscriptionId = parseInt(subID.toString())
-            // subscriptionId = subID
-            // console.log("Subscription ID (as number):", subscriptionId)
         } else {
             console.error("SubscriptionCreated event not found or parsed incorrectly.")
         }
 
-        // console.log("Subscription ID before findSubscription:", subscriptionId)
         // Fund the subscription
         await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, VRF_SUBSCRIPTION_FUND_AMOUNT)
         // console.log("fundSubscription called")
@@ -67,23 +59,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         interval,
     ]
 
-    // console.log("Before calling deploy Raffle", args)
-    // const Raffle = await ethers.getContractFactory("Raffle")
-    // const raffle = await Raffle.deploy(
-    //     vrfCoordinatorV2Address,
-    //     entranceFee,
-    //     gasLane,
-    //     subscriptionId,
-    //     callbackGasLimit,
-    //     interval,
-    // )
     const raffle = await deploy("Raffle", {
         from: deployer,
         args: args,
         log: true,
         waitConfirmations: network.config.blockConfirmations || 1,
     })
-    // console.log("After calling deploy Raffle")
 
     // Verify on real network
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {

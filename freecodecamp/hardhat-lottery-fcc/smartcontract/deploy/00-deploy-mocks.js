@@ -14,7 +14,6 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         log("Local network detected! Deploying mocks...")
         // deploy a mock vrfcoordinator
         await deploy("VRFCoordinatorV2Mock", {
-            contract: "VRFCoordinatorV2Mock",
             from: deployer,
             log: true,
             args: [BASE_FEE, GAS_PRICE_LINK],
@@ -24,4 +23,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     }
 }
 
-module.exports.tag = ["all", "mocks"]
+module.exports.tags = ["all", "mocks"]

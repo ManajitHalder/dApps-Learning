@@ -391,24 +391,27 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 }
 ```
 
-_______________________________________________________________________________________________
-## New learnings
+---
 
-# Event handling in .js file
+#
 
+# New learnings
 
-_______________________________________________________________________________________________
-## Errors and Solutions
+---
 
-### Error: 
-- Error while deploying contract:
+# Errors and Solutions
+
+##
+
+## <span style="color:red; font-weight:bold">1. Error (TypeError: Cannot read properties of undefined (reading 'length'))</span>
 
 ```
 yarn hardhat deploy
 ```
 
-### Problem: 
-- Problem in calling getNamedAccounts(). getNamedAccounts() is an asynchronous function. Need to call using await.
+### Problem:
+
+-   Problem in calling getNamedAccounts(). getNamedAccounts() is an asynchronous function. Need to call using await.
 
 ```
 module.exports = async ({ getNamedAccounts, deployments }) => {
@@ -419,7 +422,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.parseEther("1")
 ```
 
-Error:
+### Error while deploying contract
 
 ```
 $ yarn hardhat deploy
@@ -464,8 +467,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.parseEther("1")
 ```
 
-Problem: 
-- getNamedAccounts() is an asynchronous function, need to wait using await while calling it.
+<span style="color:green; font-weight:bold">getNamedAccounts() is an asynchronous function, need to wait using await while calling it.</span>
 
 ### Output after Solution:
 
@@ -481,4 +483,221 @@ Mocks Deployed...
 deploying "Raffle" (tx: 0x1893be130571d5f34ec168a7be6ec0a638f627576f24201bc81df03ab2f1b4cf)...: deployed at 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 with 1212096 gas
 ----------------------------------------------------------
 ✨  Done in 2.98s.
+```
+
+##
+
+## <span style="color:red; font-weight:bold">2. Error (TypeError: Cannot read properties of undefined (reading '0'))</span>
+
+```
+yarn hardhat deploy
+```
+
+### Error while fetching events using code exapmple
+
+```
+let subscriptionId = transactionReceipt.events[0].args.subId
+```
+
+```
+$ yarn hardhat deploy
+yarn run v1.22.22
+$ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/.bin/hardhat deploy
+Nothing to compile
+Local network detected! Deploying mocks...
+deploying "VRFCoordinatorV2Mock" (tx: 0xe96fe7c9819b476c12ecda8762a987c84eb2a5ef67f1a7fda46dd5bfcdb4d0e3)...: deployed at 0x5FbDB2315678afecb367f032d93F642f64180aa3 with 2967903 gas
+Mocks Deployed...
+-----------------------------------------------------
+An unexpected error occurred:
+
+Error: ERROR processing /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/deploy/01-deploy-raffle.js:
+TypeError: Cannot read properties of undefined (reading '0')
+    at Object.module.exports [as func] (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/deploy/01-deploy-raffle.js:19:51)
+    at DeploymentsManager.executeDeployScripts (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1212:22)
+    at DeploymentsManager.runDeploy (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1061:5)
+    at SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/index.ts:450:5)
+    at Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:359:14)
+    at Environment.run (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:192:14)
+    at SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/index.ts:601:32)
+    at Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:359:14)
+    at Environment.run (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:192:14)
+    at SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/index.ts:690:5)
+    at DeploymentsManager.executeDeployScripts (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1215:19)
+    at DeploymentsManager.runDeploy (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1061:5)
+    at SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/index.ts:450:5)
+    at Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:359:14)
+    at Environment.run (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:192:14)
+    at SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/index.ts:601:32)
+    at Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:359:14)
+    at Environment.run (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:192:14)
+    at SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/index.ts:690:5)
+    at Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/src/internal/core/runtime-environment.ts:359:14)
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
+
+### Problem in deploy.js
+
+```
+subscriptionId = transactionReceipt.events[0].args.subId
+```
+
+### Solution
+
+<span style="color:green; font-weight:bold">Parse the transaction log for particular event by its name and look for the indexed event parameter.</span>
+
+```
+// Find the SubscriptionCreated event
+const parsedLogs = transactionReceipt.logs.map((log) =>
+    vrfCoordinatorV2Mock.interface.parseLog(log),
+)
+
+const subscriptionCreatedEvent = parsedLogs.find(
+    (log) => log.name === "SubscriptionCreated",
+)
+
+if (subscriptionCreatedEvent) {
+    // Accessing the subId correctly based on the event structure
+    subscriptionId = subscriptionCreatedEvent.args.subId
+    // console.log("Subscription ID:", subID) // Ensure to convert to string if necessary
+} else {
+    console.error("SubscriptionCreated event not found or parsed incorrectly.")
+}
+```
+
+### Output after solution
+
+```
+$ yarn hardhat deploy
+yarn run v1.22.22
+$ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/.bin/hardhat deploy
+Nothing to compile
+Local network detected! Deploying mocks...
+deploying "VRFCoordinatorV2Mock" (tx: 0xe96fe7c9819b476c12ecda8762a987c84eb2a5ef67f1a7fda46dd5bfcdb4d0e3)...: deployed at 0x5FbDB2315678afecb367f032d93F642f64180aa3 with 2967903 gas
+Mocks Deployed...
+-----------------------------------------------------
+deploying "Raffle" (tx: 0xb9f3388306fc2edb56ae14ce0ec04fd520098a0f3b1d7015eb58783ff498f017)...: deployed at 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 with 1212108 gas
+----------------------------------------------------------
+✨  Done in 5.09s.
+```
+
+##
+
+## <span style="color:red; font-weight:bold">3. Error: No Contract deployed with name: VRFCoordinatorV2Mock</span>
+
+```
+yarn hardhat test
+```
+
+### Error generated after running test command.
+
+```
+Raffle Unit Test
+    Constructor
+      1) "before each" hook for "Constructor: Initializes the raffle correctly"
+
+
+  0 passing (1s)
+  1 failing
+
+  1) Raffle Unit Test
+       "before each" hook for "Constructor: Initializes the raffle correctly":
+     ERROR processing /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/deploy/01-deploy-raffle.js:
+Error: No Contract deployed with name: VRFCoordinatorV2Mock
+    at getContract (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/@nomiclabs/hardhat-ethers/src/helpers.ts:149:11)
+    at Object.module.exports [as func] (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/deploy/01-deploy-raffle.js:15:32)
+    at DeploymentsManager.executeDeployScripts (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1212:22)
+    at DeploymentsManager.runDeploy (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1061:5)
+    at Object.fixture (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-deploy/src/DeploymentsManager.ts:316:9)
+    at Context.<anonymous> (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/test/unit/Raffle.test.js:13:15)
+  Error: ERROR processing /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/deploy/01-deploy-raffle.js:
+  Error: No Contract deployed with name: VRFCoordinatorV2Mock
+      at getContract (node_modules/@nomiclabs/hardhat-ethers/src/helpers.ts:149:11)
+      at Object.module.exports [as func] (deploy/01-deploy-raffle.js:15:32)
+      at DeploymentsManager.executeDeployScripts (node_modules/hardhat-deploy/src/DeploymentsManager.ts:1212:22)
+      at DeploymentsManager.runDeploy (node_modules/hardhat-deploy/src/DeploymentsManager.ts:1061:5)
+      at Object.fixture (node_modules/hardhat-deploy/src/DeploymentsManager.ts:316:9)
+      at Context.<anonymous> (test/unit/Raffle.test.js:13:15)
+      at DeploymentsManager.executeDeployScripts (node_modules/hardhat-deploy/src/DeploymentsManager.ts:1215:19)
+      at DeploymentsManager.runDeploy (node_modules/hardhat-deploy/src/DeploymentsManager.ts:1061:5)
+      at Object.fixture (node_modules/hardhat-deploy/src/DeploymentsManager.ts:316:9)
+      at Context.<anonymous> (test/unit/Raffle.test.js:13:15)
+```
+
+### Problem found in deploy script 00-deploy-mocks.js file.
+
+```
+module.exports.tag = ["all", "mocks"]
+```
+
+<span style="color:green; font-weight:bold">module.exports.tag is wrong it should be module.exports.tags</span>
+
+```
+module.exports.tags = ["all", "mocks"]
+```
+
+## <span style="color:red; font-weight:bold">4. Error [ERR_REQUIRE_ESM]: require() of ES Module</span>
+
+```
+yarn hardhat test
+```
+
+### Error
+
+```
+yarn hardhat test
+yarn run v1.22.22
+$ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/.bin/hardhat test
+An unexpected error occurred:
+
+Error [ERR_REQUIRE_ESM]: require() of ES Module /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/chai/chai.js from /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/test/unit/Raffle.test.js not supported.
+Instead change the require of chai.js in /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/test/unit/Raffle.test.js to a dynamic import() which is available in all CommonJS modules.
+    at Object.<anonymous> (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/test/unit/Raffle.test.js:3:20)
+    at /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/mocha/lib/mocha.js:414:36
+    at Array.forEach (<anonymous>)
+    at Mocha.loadFiles (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/mocha/lib/mocha.js:411:14)
+    at Mocha.run (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/mocha/lib/mocha.js:972:10)
+    at testFailures (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/builtin-tasks/test.js:102:15)
+    at new Promise (<anonymous>)
+    at SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/builtin-tasks/test.js:101:32)
+    at async Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/internal/core/runtime-environment.js:228:20)
+    at async Environment.run (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/internal/core/runtime-environment.js:91:24)
+    at async SimpleTaskDefinition.action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/builtin-tasks/test.js:127:26)
+    at async Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/internal/core/runtime-environment.js:228:20)
+    at async Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/internal/core/runtime-environment.js:228:20)
+    at async OverriddenTaskDefinition._action (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat-gas-reporter/dist/index.js:82:5)
+    at async Environment._runTaskDefinition (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/internal/core/runtime-environment.js:228:20)
+    at async Environment.run (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/internal/core/runtime-environment.js:91:24)
+    at async main (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/hardhat/internal/cli/cli.js:224:13) {
+  code: 'ERR_REQUIRE_ESM'
+```
+
+### Problem
+
+Due to version of chai. Version of chai needed "chai": "^4.2.0" but "chai": "^5.1.1" was installed.
+
+### Solution
+
+<span style="color:green; font-weight:bold">chai version 4.2.0 was installed</span>
+
+```
+yarn add --dev chai@^4.2.0
+```
+
+### Output after installing chai@^4.2.0
+
+```
+yarn hardhat test
+yarn run v1.22.22
+$ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/.bin/hardhat test
+
+
+  Raffle Unit Test
+    Constructor
+      ✔ Constructor: Initializes the raffle correctly
+
+
+  1 passing (1s)
+
+✨  Done in 4.57s.
 ```
