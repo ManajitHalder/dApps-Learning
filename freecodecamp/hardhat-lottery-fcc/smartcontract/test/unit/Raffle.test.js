@@ -15,13 +15,21 @@ const { assert, expect } = require("chai")
               vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock", deployer)
           })
 
-          describe("Constructor", async () => {
-              it("Constructor: Initializes the raffle correctly", async () => {
+          describe("constructor", async () => {
+              it("constructor: Initializes the raffle correctly", async () => {
                   const raffleState = await raffle.getRaffleState()
                   const interval = await raffle.getInterval()
                   assert.equal(raffleState.toString(), "0")
                   //   assert.equal(interval.toString(), networkConfig[chainId]["interval"])
                   expect(interval.toString()).to.equal(networkConfig[chainId]["interval"])
+              })
+          })
+
+          describe("enterRaffle", async () => {
+              it("enterRaffle: reverts when you don't pay", async () => {
+                  await expect(raffle.enterRaffle()).to.be.revertedWith(
+                      "Raffle__NotEnoughETHEntered",
+                  )
               })
           })
       })
