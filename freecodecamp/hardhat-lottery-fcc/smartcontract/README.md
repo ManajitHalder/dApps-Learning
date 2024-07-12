@@ -417,7 +417,100 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
 # New learnings
 
----
+## <span style="color:orange">Get the block time stamp and Increases time interval of a block</span>
+
+-   Get the latest block and block time stamp
+
+```
+const blockBefore = await ethers.provider.getBlock("latest")
+const timeBefore = blockBefore.timestamp
+```
+
+-   Increase the time interval and mine a block
+
+```
+await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+await network.provider.send("evm_mine", [])
+```
+
+Complete code
+
+```
+it("enterRaffle: doesn't allow enterRaffle when raffle state is CALCULATING", async () => {
+    /*
+    To make this test pass we have to make the raffle state CALCULATING (not OPEN).
+    There is only one way it is getting set to CALCULATION and it is in method performUpkeep
+    function. After checkUpkeep returns true, raffle state is set to CALCULATING.
+
+    CheckUpkeep can return true if it statifies the following conditions:
+    if raffle state is OPEN
+    if timepassed is greater than interval
+    if raffle has atleat 1 player (which is already true)
+    if raffle has some balance
+    */
+
+    await raffle.enterRaffle({ value: raffleEntranceFee })
+    const blockBefore = await ethers.provider.getBlock("latest")
+    const timeBefore = blockBefore.timestamp
+
+    // increase time interval
+    await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+    await network.provider.send("evm_mine", [])
+
+    const blockAfter = await ethers.provider.getBlock("latest")
+    const timeAfter = blockAfter.timestamp
+    const timeInterval = await raffle.getInterval()
+
+    console.log("Time before increasing time interval ", timeInterval.toNumber())
+    console.log("Time after increasing time interval ", timeAfter - timeBefore)
+
+    // we pretend to be chainlink keeper
+    let state = await raffle.getRaffleState()
+    console.log("Raffle state before performUpkeep: ", state.toString())
+
+    await raffle.performUpkeep([])
+
+    state = await raffle.getRaffleState()
+    console.log("Raffle state after performUpkeep: ", state.toString())
+
+    await expect(raffle.enterRaffle({ value: raffleEntranceFee })).to.be.revertedWith(
+        "Raffle__NotOpen",
+    )
+})
+```
+
+## <span style="color:orange">Register a consumer contract to request and receive random words from the VRF coordinator</span>
+
+The addConsumer function is used to register a consumer contract with the VRF coordinator.
+The consumer contract is the one that will request random values and receive the random words
+from the VRF coordinator.
+
+### Key VRF-Related Functions
+
+<span style="color:magenta">requestRandomWords: </span>
+
+-   This function is called by the Raffle contract to request random words
+    from the VRF coordinator.
+
+<span style="color:magenta">fulfillRandomWords: </span>
+
+-   This function is called by the VRF coordinator
+    (or in your mock, by the test code) to deliver the random words to the Raffle contract.
+
+### Raffle Contract Integration
+
+In the Raffle contract, the flow typically looks something like this:
+
+-   Perform Upkeep: The Raffle contract checks if it's time to pick a winner.
+    This is done in the performUpkeep function.
+-   Request Random Words: If it's time to pick a winner, the Raffle contract calls
+    requestRandomWords on the VRF coordinator to get random values.
+-   Receive Random Words: Once the random words are generated, the VRF coordinator
+    calls fulfillRandomWords on the Raffle contract to provide the random values.
+
+##
+
+##
 
 # Errors and Solutions
 
