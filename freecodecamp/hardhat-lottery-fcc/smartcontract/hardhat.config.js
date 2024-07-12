@@ -5,6 +5,7 @@ require("solidity-coverage")
 require("hardhat-gas-reporter")
 require("hardhat-contract-sizer")
 require("dotenv").config()
+require("@nomiclabs/hardhat-ethers")
 
 const SEPOLIA_RPC_URL =
     process.env.SEPOLIA_RPC_URL ||

@@ -7,13 +7,13 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
     let vrfCoordinatorV2Address, subscriptionId, vrfCoordinatorV2Mock
-    const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.parseEther("30")
+    const VRF_SUBSCRIPTION_FUND_AMOUNT = ethers.utils.parseEther("30")
 
     // if (chainId == 31337) {
     if (developmentChains.includes(network.name)) {
         // For hardhat or localhost
         vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
-        vrfCoordinatorV2Address = vrfCoordinatorV2Mock.target
+        vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
         const transactionResponse = await vrfCoordinatorV2Mock.createSubscription()
         const transactionReceipt = await transactionResponse.wait(1)
         // subscriptionId = transactionReceipt.events[0].args.subId

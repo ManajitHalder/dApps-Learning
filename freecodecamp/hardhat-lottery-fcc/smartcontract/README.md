@@ -12,6 +12,26 @@ Install all dependencies. After installation check for all pacakges installed un
 
 yarn add --dev @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers ethers @nomiclabs/hardhat-etherscan @nomiclabs/hardhat-waffle chai ethereum-waffle hardhat hardhat-contract-sizer hardhat-deploy hardhat-gas-reporter prettier prettier-plugin-solidity solhint solidity-coverage dotenv
 
+Insltall commands specific version:
+
+```
+yarn add --dev @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers@^0.3.0-beta.13
+yarn add --dev @nomiclabs/hardhat-etherscan@^3.0.0
+yarn add --dev @nomiclabs/hardhat-waffle@^2.0.1
+yarn add --dev chai@^4.3.4
+yarn add --dev ethereum-waffle@^3.4.0
+yarn add --dev ethers@^5.5.1
+yarn add --dev hardhat@^2.6.7
+yarn add --dev hardhat-contract-sizer@^2.4.0
+yarn add --dev hardhat-deploy@^0.9.29
+yarn add --dev hardhat-gas-reporter
+yarn add --dev prettier
+yarn add --dev prettier-plugin-solidity
+yarn add --dev solhint
+yarn add --dev solidity-coverage
+yarn add --dev dotenv
+```
+
 Add the packages added to hardhat.config.js file:
 
 ```
@@ -700,4 +720,44 @@ $ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartco
   1 passing (1s)
 
 ✨  Done in 4.57s.
+```
+
+## <span style="color:red; font-weight:bold">4. TypeError: Cannot read properties of undefined (reading 'JsonRpcProvider')</span>
+
+```
+An unexpected error occurred:
+
+TypeError: Cannot read properties of undefined (reading 'JsonRpcProvider')
+    at Object.<anonymous> (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/@nomiclabs/hardhat-ethers/src/internal/ethers-provider-wrapper.ts:4:61)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at require (node:internal/modules/helpers:177:18)
+    at Object.<anonymous> (/Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartcontract/node_modules/@nomiclabs/hardhat-ethers/src/internal/provider-proxy.ts:9:1)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+```
+
+### Solution
+
+Insltall packages with specific version from the source of project or install all the latest versions and follow the documentations of ethers to use particular as per latest changes.
+
+```
+yarn add --dev @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers@^0.3.0-beta.13
+yarn add --dev @nomiclabs/hardhat-etherscan@^3.0.0
+yarn add --dev @nomiclabs/hardhat-waffle@^2.0.1
+yarn add --dev chai@^4.3.4
+yarn add --dev ethereum-waffle@^3.4.0
+yarn add --dev ethers@^5.5.1
+yarn add --dev hardhat@^2.6.7
+yarn add --dev hardhat-contract-sizer@^2.4.0
+yarn add --dev hardhat-deploy@^0.9.29
+yarn add --dev hardhat-gas-reporter
+yarn add --dev prettier
+yarn add --dev prettier-plugin-solidity
+yarn add --dev solhint
+yarn add --dev solidity-coverage
+yarn add --dev dotenv
 ```
