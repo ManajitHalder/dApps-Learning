@@ -722,7 +722,12 @@ $ /Users/reyansh/Code/Smart/dAppLearned/freecodecamp/hardhat-lottery-fcc/smartco
 ✨  Done in 4.57s.
 ```
 
-## <span style="color:red; font-weight:bold">4. TypeError: Cannot read properties of undefined (reading 'JsonRpcProvider')</span>
+## <span style="color:red; font-weight:bold">5. TypeError: Cannot read properties of undefined (reading 'JsonRpcProvider')</span>
+
+### Error description
+
+This error occurs when there is a mitchmatch in versoin of package installed or some packages are not installed.
+In this case there was some mitch match in some package version. All the packages were latest pacakages.
 
 ```
 An unexpected error occurred:
@@ -742,7 +747,9 @@ TypeError: Cannot read properties of undefined (reading 'JsonRpcProvider')
 
 ### Solution
 
-Insltall packages with specific version from the source of project or install all the latest versions and follow the documentations of ethers to use particular as per latest changes.
+<span style="color:green"> Insltall packages with specific version from the source of project or install all the latest versions and follow the documentations of ethers to use particular as per latest changes. </span>
+
+<span style="color:green"> In this case packages with specific version were installed as shown below </span>
 
 ```
 yarn add --dev @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers@^0.3.0-beta.13
