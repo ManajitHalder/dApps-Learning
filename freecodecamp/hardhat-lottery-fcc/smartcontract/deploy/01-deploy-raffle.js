@@ -12,31 +12,24 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     // if (chainId == 31337) {
     if (developmentChains.includes(network.name)) {
         // For hardhat or localhost
-        vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
+
+        const vrfCoordinatorV2MockDeployment = await deployments.get("VRFCoordinatorV2Mock")
+        vrfCoordinatorV2Mock = await ethers.getContractAt(
+            "VRFCoordinatorV2Mock",
+            vrfCoordinatorV2MockDeployment.address,
+            deployer,
+        )
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
         const transactionResponse = await vrfCoordinatorV2Mock.createSubscription()
         const transactionReceipt = await transactionResponse.wait(1)
-        // subscriptionId = transactionReceipt.events[0].args.subId
-
-        // Find the SubscriptionCreated event
-        const parsedLogs = transactionReceipt.logs.map((log) =>
-            vrfCoordinatorV2Mock.interface.parseLog(log),
-        )
-
-        const subscriptionCreatedEvent = parsedLogs.find(
-            (log) => log.name === "SubscriptionCreated",
-        )
-
-        if (subscriptionCreatedEvent) {
-            // Accessing the subId correctly based on the event structure
-            subscriptionId = subscriptionCreatedEvent.args.subId
-            // console.log("Subscription ID:", subID) // Ensure to convert to string if necessary
-        } else {
-            console.error("SubscriptionCreated event not found or parsed incorrectly.")
-        }
+        subscriptionId = transactionReceipt.events[0].args.subId
+        // console.log(transactionReceipt.events[0].args.subId.toNumber())
 
         // Fund the subscription
-        await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, VRF_SUBSCRIPTION_FUND_AMOUNT)
+        await vrfCoordinatorV2Mock.fundSubscription(
+            subscriptionId.toNumber(),
+            VRF_SUBSCRIPTION_FUND_AMOUNT,
+        )
         // console.log("fundSubscription called")
     } else {
         // For real testnet

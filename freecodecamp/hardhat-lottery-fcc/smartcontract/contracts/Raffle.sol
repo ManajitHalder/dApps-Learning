@@ -57,7 +57,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
     /* Events */
     event RaffleEnter(address indexed player);
-    event RequestedRaffleWinner(uint256 indexed requrestId);
+    event RequestedRaffleWinner(uint256 indexed requestId);
     event WinnerPicked(address indexed winner);
 
     /* Functions */

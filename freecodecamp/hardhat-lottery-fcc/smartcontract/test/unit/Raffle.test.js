@@ -173,4 +173,61 @@ const { assert, expect } = require("chai")
                   expect(upkeepNeeded).to.be.true
               })
           })
+
+          describe("performUpkeep", () => {
+              it("performUpkeep: it can run only when checkUpkeep returns true", async () => {
+                  await raffle.enterRaffle({ value: raffleEntranceFee })
+                  await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+                  await network.provider.request({ method: "evm_mine", params: [] })
+                  const tx = await raffle.performUpkeep("0x")
+                  expect(tx).to.exist
+              })
+
+              it("performUpkeep: it reverts if checkUpkeep is false", async () => {
+                  // Set the event parameters
+                  const raffleBalance = await ethers.provider.getBalance(raffle.address)
+                  const playerCount = await raffle.getNumberOfPlayers()
+                  const raffleState = await raffle.getRaffleState()
+
+                  await expect(raffle.performUpkeep([])).to.be.revertedWith(
+                      "Raffle__UpkeepNotNeeded",
+                  )
+
+                  // Try calling performUpkeep and catch the error
+                  try {
+                      await raffle.performUpkeep([])
+                  } catch (error) {
+                      // Decode the error data to extract the parameters
+                      const errorData = error.data
+                      const iface = new ethers.utils.Interface([
+                          "error Raffle__UpkeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState)",
+                      ])
+
+                      const decodeError = iface.decodeErrorResult(
+                          "Raffle__UpkeepNotNeeded",
+                          errorData,
+                      )
+                      //   Check if the decoded parameters match the actual parameters values
+                      expect(decodeError.currentBalance.toString()).to.equal(
+                          raffleBalance.toString(),
+                      )
+                      expect(decodeError.numPlayers.toString()).to.equal(playerCount.toString())
+                      expect(decodeError.raffleState.toString()).to.equal(raffleState.toString())
+                  }
+              })
+
+              it("performUpkeep: it updates the raffle state, emits the event and calls the vrfCoordinator", async () => {
+                  // pay some ETH and add some timestamp
+                  await raffle.enterRaffle({ value: raffleEntranceFee })
+                  await network.provider.send("evm_increaseTime", [interval.toNumber() + 1])
+                  await network.provider.send("evm_mine", [])
+                  const txResponse = await raffle.performUpkeep([])
+                  const txReceipt = await txResponse.wait(1)
+                  const requestId = txReceipt.events[1].args.requestId
+                  console.log("Request Id: ", txReceipt.events[1].args.requestId.toNumber())
+                  expect(requestId.toNumber()).to.be.greaterThan(0)
+                  const raffleState = await raffle.getRaffleState()
+                  expect(raffleState.toString()).to.equal("1")
+              })
+          })
       })
