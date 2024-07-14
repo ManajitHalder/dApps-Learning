@@ -38,6 +38,19 @@ module.exports = {
             blockConfirmations: 6,
         },
     },
+    etherscan: {
+        apiKey: ETHERSCAN_API_KEY,
+        customChains: [
+            {
+                network: "sepolia",
+                chainId: 11155111,
+                urls: {
+                    apiURL: "https://api-sepolia.etherscan.io/api",
+                    browserURL: "https://sepolia.etherscan.io",
+                },
+            },
+        ],
+    },
     gasReporter: {
         enabled: false,
         currency: "INR",

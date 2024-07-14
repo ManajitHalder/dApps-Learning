@@ -42,7 +42,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     address payable[]  private s_players;
     VRFCoordinatorV2Interface private immutable i_vrfCoordinator;
     bytes32 private immutable i_gasLane; //keyHash
-    uint64 private immutable i_subscriptionId;
+    uint256 private immutable i_subscriptionId;
     uint16 private constant MINIMUM_REQUEST_CONFIRMATIONS = 3;
     uint32 private immutable i_callbackGasLimit;
     uint32 private constant NUM_WORDS = 1;
@@ -65,7 +65,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         address vrfCoordinatorV2, // contract (need to deply this contract)
         uint256 entranceFee, 
         bytes32 gasLane, 
-        uint64 subscriptionId,
+        uint256 subscriptionId,
         uint32 callbackGasLimit,
         uint256 interval
         ) VRFConsumerBaseV2(vrfCoordinatorV2) 
@@ -74,7 +74,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         i_vrfCoordinator = VRFCoordinatorV2Interface(vrfCoordinatorV2);
         i_entranceFee = entranceFee;
         i_gasLane = gasLane;            
-        i_subscriptionId = subscriptionId;
+        i_subscriptionId = uint256(keccak256(abi.encodePacked(subscriptionId)));
         i_callbackGasLimit = callbackGasLimit;
 
         // Chainlink Automation
@@ -130,7 +130,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
         uint256 requestId = i_vrfCoordinator.requestRandomWords(
             i_gasLane,
-            i_subscriptionId,
+            uint64(i_subscriptionId),
             MINIMUM_REQUEST_CONFIRMATIONS,
             i_callbackGasLimit,
             NUM_WORDS
@@ -198,6 +198,6 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     }
 
     function getSubscriptionId() public view returns (uint64) {
-        return i_subscriptionId;
+        return uint64(i_subscriptionId);
     }
 }

@@ -14,7 +14,8 @@ const networkConfig = {
         vrfCoordinatorV2: "0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B",
         entranceFee: ethers.utils.parseEther("0.01"),
         gasLane: "0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae",
-        subscriptionId: "0",
+        subscriptionId:
+            "114970156027935344572119887480406656453851062636047038595460985042980786042947",
         callbackGasLimit: "500000",
         interval: "30",
     },

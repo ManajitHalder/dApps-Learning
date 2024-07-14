@@ -35,7 +35,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         // For real testnet
         console.log("Testing testnet Sepolia")
         vrfCoordinatorV2Address = networkConfig[chainId]["vrfCoordinatorV2"]
-        subscriptionId = networkConfig[chainId]["subscriptionId"]
+        subscriptionId = ethers.BigNumber.from(networkConfig[chainId]["subscriptionId"]).toString() // Convert to string
     }
 
     const entranceFee = networkConfig[chainId]["entranceFee"]
