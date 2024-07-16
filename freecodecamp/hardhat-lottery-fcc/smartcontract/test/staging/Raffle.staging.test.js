@@ -63,10 +63,23 @@ Steps for staging test:
 
 1. Get our SubId for Chainlink VRF
       Create subscription: https://vrf.chain.link/
+      Starting balance: 2
+      Add consumer: 0xE280d1549A13cf71B7275D789680f9b7F2B6E525
       
 2. Deploy our contract using the SubId
+      SubscriptionId: 114970156027935344572119887480406656453851062636047038595460985042980786042947
+
 3. Register the contract with Chainlink VRF & it's subId
+      Contract address: 0xE280d1549A13cf71B7275D789680f9b7F2B6E525
+      SubscriptionId: 114970156027935344572119887480406656453851062636047038595460985042980786042947
+
 4. Register the contract with Chainlink Keepers
+      Trigger: Custom logic
+      Contract address: 0xE280d1549A13cf71B7275D789680f9b7F2B6E525
+      Admin address: 0x3b4c12339a246edfe8c6cfe084a7807bad0e51d4 (walltet address)
+      Gas limit: 500000
+      Starting balance: 8
+
 5. Run staging tests
 
 */
