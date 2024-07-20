@@ -56,6 +56,7 @@ Run the development server in a separate ternminal:
 ```
 yarn dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
@@ -64,4 +65,21 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 ```
 yarn add moralis react-moralis
+```
+
+Error: moralis-v1 resolve
+
+```
+Import trace for requested module:
+./pages/_app.js
+ ⨯ ./node_modules/react-moralis/lib/index.esm.js:3:1
+Module not found: Can't resolve 'moralis-v1'
+
+https://nextjs.org/docs/messages/module-not-found
+```
+
+Solution: install moralis-v1
+
+```
+yarn add moralis-v1
 ```
