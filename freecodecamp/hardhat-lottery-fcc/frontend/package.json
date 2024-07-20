@@ -1,0 +1,21 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "moralis": "^2.26.9",
+    "next": "14.2.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-moralis": "^1.4.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}
