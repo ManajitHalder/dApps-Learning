@@ -16,6 +16,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ManualHeader />
+      <div>Frontend Raffle (Lottery)</div>
     </>
   )
 }
