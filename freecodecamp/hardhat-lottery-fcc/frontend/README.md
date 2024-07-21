@@ -67,7 +67,7 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 yarn add moralis react-moralis
 ```
 
-Error: moralis-v1 resolve
+### Error: moralis-v1 resolve
 
 ```
 Import trace for requested module:
@@ -82,4 +82,10 @@ Solution: install moralis-v1
 
 ```
 yarn add moralis-v1
+```
+
+## Insall web3uikit
+
+```
+yarn add web3uikit
 ```
