@@ -29,7 +29,8 @@ export default function ManualHeader() {
         console.log("null account found")
       }
     })
-  })
+  }, [])
+
   return (
     <div>
       {account ? (

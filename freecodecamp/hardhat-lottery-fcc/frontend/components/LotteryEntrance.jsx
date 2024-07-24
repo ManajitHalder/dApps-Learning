@@ -1,8 +1,6 @@
-import { useWeb3Contract } from "react-moralis"
 import { abi, contractAddresses } from "../constants"
-import { useMoralis } from "react-moralis"
-import { useEffect } from "react"
-import { useState } from "react"
+import { useWeb3Contract, useMoralis } from "react-moralis"
+import { useEffect, useState } from "react"
 import { ethers } from "ethers"
 import { useNotification } from "web3uikit"
 
@@ -25,15 +23,15 @@ export default function LotteryEntrance() {
     abi: abi,
     contractAddress: raffleAddress,
     functionName: "enterRaffle",
-    params: [],
     msgValue: entranceFee,
+    params: {},
   })
 
   const { runContractFunction: getEntranceFee } = useWeb3Contract({
     abi: abi,
     contractAddress: raffleAddress,
     functionName: "getEntranceFee",
-    params: [],
+    params: {},
   })
 
   const { runContractFunction: getNumberOfPlayers } = useWeb3Contract({
@@ -47,7 +45,7 @@ export default function LotteryEntrance() {
     abi: abi,
     contractAddress: raffleAddress,
     functionName: "getRecentWinner",
-    params: [],
+    params: {},
   })
 
   async function updateUI() {
@@ -56,9 +54,11 @@ export default function LotteryEntrance() {
         console.error("Raffle address is not defined.")
         return
       }
-      const entranceFeeFromContract = await getEntranceFee()
-      const numberOfPlayersFromContract = await getNumberOfPlayers()
-      const recentWinnerFromContract = await getRecentWinner()
+      const entranceFeeFromContract = (await getEntranceFee()).toString()
+      const numberOfPlayersFromContract = (
+        await getNumberOfPlayers()
+      ).toString()
+      const recentWinnerFromContract = (await getRecentWinner()).toString()
 
       if (entranceFeeFromContract) {
         setEntranceFee(entranceFeeFromContract)
@@ -72,13 +72,13 @@ export default function LotteryEntrance() {
           "numberOfPlayersFromContract in UpdateUI",
           numberOfPlayersFromContract.toString(),
         )
-        setNumberOfPlayers(numberOfPlayersFromContract.toString())
+        setNumberOfPlayers(numberOfPlayersFromContract)
       } else {
         console.error("Failed to get number of players from contract")
       }
 
       if (recentWinnerFromContract) {
-        setRecentWinner(recentWinnerFromContract.toString())
+        setRecentWinner(recentWinnerFromContract)
       } else {
         console.log("Failed to get recent winner from contract")
       }
