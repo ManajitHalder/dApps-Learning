@@ -1,0 +1,23 @@
+node_modules
+.env
+
+# Hardhat files
+artifacts/
+cache/
+
+# Solidity-coverage files
+coverage/
+coverage.json
+
+# TypeChain files
+/typechain
+/typechain-types
+
+# Hardhat Ignition default folder for deployments against a local node
+ignition/deployments/chain-31337
+
+# Gas report
+gas-report.txt
+
+# Deployments
+deployments
