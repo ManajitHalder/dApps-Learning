@@ -23,9 +23,10 @@ async function getWeth() {
     await tx.wait(1)
     const wethBalance = await iWeth.balanceOf(deployer)
     // console.log(`Got ${wethBalance.toString()} WETH`)
-    console.log(`Got ${ethers.utils.formatEther(wethBalance)} WETH`)
+    console.log(`getWeth: Got ${ethers.utils.formatEther(wethBalance)} WETH`)
 }
 
 module.exports = {
     getWeth,
+    AMOUNT,
 }

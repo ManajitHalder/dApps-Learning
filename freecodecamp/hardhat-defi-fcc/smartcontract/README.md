@@ -44,3 +44,14 @@ url: MAINNET_RPC_URL,
 
 This will form the mainnet after finding forking and MAINNET_RPC_URL url.
 
+## Run script to get lending pool address and IWeth value
+
+```
+yarn hardhat run scripts/aaveBorrow.js --network hardhat
+```
+
+or
+
+```
+yarn hardhat run scripts/aaveBorrow.js
+```
