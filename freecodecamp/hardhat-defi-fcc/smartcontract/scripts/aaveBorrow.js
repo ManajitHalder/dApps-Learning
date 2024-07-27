@@ -15,14 +15,65 @@ async function main() {
     const lendingPool = await getLendingPool(deployer)
     console.log("aaveBorrow: Lending pool address", lendingPool.address)
 
-    // deposit
+    // Deposit
     const wethTokenAddress = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
 
-    // approve
+    // Approve
     await approveERC20(wethTokenAddress, lendingPool.address, AMOUNT, deployer)
     console.log("Depositing...")
     await lendingPool.deposit(wethTokenAddress, AMOUNT, deployer, 0)
     console.log("Deposited!")
+
+    // Borrow
+    let { totalDebtETH, availableBorrowsETH } = await getBorrowUserData(lendingPool, deployer)
+
+    const daiPrice = await getDAIPrice()
+
+    // availableBorrowsETH ?? What the conversion rate on DAI is?
+
+    // How much we have borrowed, how much we have in collateral, how much we can borrow.
+}
+
+async function getDAIPrice() {
+    // DAI / ETH Adress on Ethereum Mainnet (https://docs.chain.link/data-feeds/price-feeds/addresses?network=ethereum&page=5)
+    const daiETHPriceFeed = await ethers.getContractAt(
+        "AggregatorV3Interface",
+        "0x773616E4d11A78F511299002da57A0a94577F1f4",
+    )
+    // Since we are not sending any transaction we are not passing the deployer to connect
+    // to the deployer. We are just going to read from the transaction.
+    // Reading don't need a signer (deployer)
+    // Sending need a signer (deployer)
+
+    const price = (await daiETHPriceFeed.latestRoundData())[1]
+    console.log(`The DAI/ETH price is ${price.toString()}`)
+
+    return price
+}
+
+async function getBorrowUserData(lendingPool, account) {
+    const {
+        totalCollateralETH,
+        totalDebtETH,
+        availableBorrowsETH,
+        currentLiquidationThreshold,
+        healthFactor,
+    } = await lendingPool.getUserAccountData(account)
+
+    console.log(`You have ${totalCollateralETH} worth of ETH deposited in your Account`)
+    console.log(`You have ${totalDebtETH} worth of ETH borrowed`)
+    console.log(`You can borrow ${availableBorrowsETH} worth of ETH`)
+    console.log(`Your current liquidation threshold is ${currentLiquidationThreshold}`)
+    console.log(`Your account health factor is ${healthFactor}`)
+
+    return { totalDebtETH, availableBorrowsETH }
+}
+
+async function approveERC20(erc20Address, spenderAddress, amountToSpend, account) {
+    const erc20Token = await ethers.getContractAt("IERC20", erc20Address, account)
+    const tx = await erc20Token.approve(spenderAddress, amountToSpend)
+    await tx.wait(1)
+    console.log("Approved!")
 }
 
 async function getLendingPool(account) {
@@ -36,13 +87,6 @@ async function getLendingPool(account) {
     const lendingPool = await ethers.getContractAt("ILendingPool", lendingPoolAddress, account)
 
     return lendingPool
-}
-
-async function approveERC20(erc20Address, spenderAddress, amountToSpend, account) {
-    const erc20Token = await ethers.getContractAt("IERC20", erc20Address, account)
-    const tx = await erc20Token.approve(spenderAddress, amountToSpend)
-    await tx.wait(1)
-    console.log("Approved!")
 }
 
 main()
