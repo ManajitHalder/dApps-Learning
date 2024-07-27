@@ -36,10 +36,11 @@ Create a new app in alchemy.com https://dashboard.alchemy.com/apps
 Copy the Ethereum mainnet url, paste it into hardhat.config.js file:
 
 hardhat: {
-    chainId: 31337,
-    forking: {
-        url: MAINNET_RPC_URL,
-    },
+chainId: 31337,
+forking: {
+url: MAINNET_RPC_URL,
+},
 }
 
+This will form the mainnet after finding forking and MAINNET_RPC_URL url.
 
