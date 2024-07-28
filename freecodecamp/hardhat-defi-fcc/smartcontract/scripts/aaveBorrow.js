@@ -28,17 +28,39 @@ async function main() {
     let { totalDebtETH, availableBorrowsETH } = await getBorrowUserData(lendingPool, deployer)
 
     const daiPrice = await getDAIPrice()
+    const amountOfDAIToBorrow = availableBorrowsETH.toString() * 0.95 * (1 / daiPrice.toNumber())
+    console.log(`You can borrow ${amountOfDAIToBorrow} DAI`)
+    const amountOfDaiToBorrowInWei = ethers.utils.parseEther(amountOfDAIToBorrow.toString())
+    console.log(`You can borrow ${amountOfDaiToBorrowInWei} DAI in WEI`)
 
     // availableBorrowsETH ?? What the conversion rate on DAI is?
-
     // How much we have borrowed, how much we have in collateral, how much we can borrow.
+    const daiTokenAddress = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+    await borrowDAI(daiTokenAddress, lendingPool, amountOfDaiToBorrowInWei, deployer)
+    await getBorrowUserData(lendingPool, deployer)
+
+    // Repay
+    await repay(amountOfDaiToBorrowInWei, daiTokenAddress, lendingPool, deployer)
+    await getBorrowUserData(lendingPool, deployer)
+}
+
+async function repay(amount, daiAddress, lendingPool, account) {
+    await approveERC20(daiAddress, lendingPool.address, amount, account)
+    const repayTx = await lendingPool.repay(daiAddress, amount, 2, account)
+    await repayTx.wait(1)
+    console.log("\nRepayed!!!")
+}
+async function borrowDAI(daiAddress, lendingPool, amountOfDaiToBorrowInWei, account) {
+    const borrowTx = await lendingPool.borrow(daiAddress, amountOfDaiToBorrowInWei, 2, 0, account)
+    await borrowTx.wait(1)
+    console.log("You have borrowed!!!")
 }
 
 async function getDAIPrice() {
     // DAI / ETH Adress on Ethereum Mainnet (https://docs.chain.link/data-feeds/price-feeds/addresses?network=ethereum&page=5)
     const daiETHPriceFeed = await ethers.getContractAt(
         "AggregatorV3Interface",
-        "0x773616E4d11A78F511299002da57A0a94577F1f4",
+        "0x773616E4d11A78F511299002da57A0a94577F1f4"
     )
     // Since we are not sending any transaction we are not passing the deployer to connect
     // to the deployer. We are just going to read from the transaction.
@@ -60,11 +82,11 @@ async function getBorrowUserData(lendingPool, account) {
         healthFactor,
     } = await lendingPool.getUserAccountData(account)
 
-    console.log(`You have ${totalCollateralETH} worth of ETH deposited in your Account`)
+    console.log(`\nYou have ${totalCollateralETH} worth of ETH deposited in your Account`)
     console.log(`You have ${totalDebtETH} worth of ETH borrowed`)
     console.log(`You can borrow ${availableBorrowsETH} worth of ETH`)
     console.log(`Your current liquidation threshold is ${currentLiquidationThreshold}`)
-    console.log(`Your account health factor is ${healthFactor}`)
+    console.log(`Your account health factor is ${healthFactor}\n`)
 
     return { totalDebtETH, availableBorrowsETH }
 }
@@ -80,7 +102,7 @@ async function getLendingPool(account) {
     const lendingPoolAddressesProvider = await ethers.getContractAt(
         "ILendingPoolAddressesProvider",
         "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5",
-        account,
+        account
     )
 
     const lendingPoolAddress = await lendingPoolAddressesProvider.getLendingPool()
