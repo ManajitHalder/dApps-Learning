@@ -59,3 +59,83 @@ deploying "BasicNft" (tx: 0xd1fb7e58e72993f2cd7d036f3616fb29ca7bf61dc57daeeb02a9
 --------------------------------------------------------------------------
 ✨  Done in 6.06s.
 ```
+
+## Formatting files
+
+### Formatting javascript files:
+
+Command to format a js file
+
+```
+Shift + Option + F
+```
+
+Install prettier for VS Code and add the following setting in "Preferences: Open User Setting (JSON)"
+
+```
+Command + Shift + P
+```
+
+Select "Preferences: Open User Setting (JSON)" and make keep the javascript changes same:
+
+```
+{
+  "workbench.colorTheme": "Default High Contrast",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "files.autoSave": "afterDelay",
+  "git.openRepositoryInParentFolders": "never",
+  "[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "remote.SSH.remotePlatform": {
+    "*.gitpod.io": "linux"
+  },
+  "prettier.singleQuote": true,
+  "editor.minimap.size": "fit",
+  "editor.acceptSuggestionOnEnter": "off",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.requireConfig": true
+}
+```
+
+## Formatting solidity files
+
+In addition to the above
+
+Install the package "prettier-plugin-solidity"
+
+```
+yarn add --dev prettier-plugin-solidity
+```
+
+And install "JuanBlanco.solidity" by typing "Shift + Option + F" to format the file and install it. Or install it by running the command
+
+```
+code --install-extension JuanBlanco.solidity
+```
+
+And add the following changes in "Preferences: Open User Setting (JSON)" file:
+
+```
+"[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
+  },
+```
+
+Keep the content of .pretiterrc as following:
+
+```
+{
+    "tabWidth": 4,
+    "useTabs": false,
+    "semi": false,
+    "singleQuote": false,
+    "plugins": ["prettier-plugin-solidity"]
+}
+```
