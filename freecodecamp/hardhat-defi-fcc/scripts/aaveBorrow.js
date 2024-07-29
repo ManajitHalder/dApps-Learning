@@ -1,3 +1,4 @@
+const { developmentChains, networkConfig } = require("../helper.hardhat.config")
 const { getWeth, AMOUNT } = require("./getWeth")
 const { getNamedAccounts, ethers } = require("hardhat")
 
@@ -16,7 +17,7 @@ async function main() {
     console.log("aaveBorrow: Lending pool address", lendingPool.address)
 
     // Deposit
-    const wethTokenAddress = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+    const wethTokenAddress = networkConfig[network.config.chainId].wethTokenAddress
 
     // Approve
     await approveERC20(wethTokenAddress, lendingPool.address, AMOUNT, deployer)
@@ -35,7 +36,8 @@ async function main() {
 
     // availableBorrowsETH ?? What the conversion rate on DAI is?
     // How much we have borrowed, how much we have in collateral, how much we can borrow.
-    const daiTokenAddress = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+    const daiTokenAddress = networkConfig[network.config.chainId].daiTokenAddress
+
     await borrowDAI(daiTokenAddress, lendingPool, amountOfDaiToBorrowInWei, deployer)
     await getBorrowUserData(lendingPool, deployer)
 
@@ -60,7 +62,7 @@ async function getDAIPrice() {
     // DAI / ETH Adress on Ethereum Mainnet (https://docs.chain.link/data-feeds/price-feeds/addresses?network=ethereum&page=5)
     const daiETHPriceFeed = await ethers.getContractAt(
         "AggregatorV3Interface",
-        "0x773616E4d11A78F511299002da57A0a94577F1f4"
+        networkConfig[network.config.chainId].daiEthPriceFeed
     )
     // Since we are not sending any transaction we are not passing the deployer to connect
     // to the deployer. We are just going to read from the transaction.
@@ -101,7 +103,7 @@ async function approveERC20(erc20Address, spenderAddress, amountToSpend, account
 async function getLendingPool(account) {
     const lendingPoolAddressesProvider = await ethers.getContractAt(
         "ILendingPoolAddressesProvider",
-        "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5",
+        networkConfig[network.config.chainId].lendingPoolAddressesProvider,
         account
     )
 
