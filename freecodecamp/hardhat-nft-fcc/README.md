@@ -139,3 +139,15 @@ Keep the content of .pretiterrc as following:
     "plugins": ["prettier-plugin-solidity"]
 }
 ```
+
+## Random IPFS hosted NFT
+
+When we mint and NFT, we will trigger a Chainlink VRF call to get us a random number.
+    Using that number we will get a random NFT.
+    NFTs: Pug, Shiba Inu, St. Bernard
+    Pug super rare
+    Shiba sort of rare
+    St. bernard common
+
+    Users have to pay to mint an NFT
+    The owner of the contract can withdraw the ETH
