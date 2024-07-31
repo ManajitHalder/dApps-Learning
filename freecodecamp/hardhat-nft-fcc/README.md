@@ -143,11 +143,37 @@ Keep the content of .pretiterrc as following:
 ## Random IPFS hosted NFT
 
 When we mint and NFT, we will trigger a Chainlink VRF call to get us a random number.
-    Using that number we will get a random NFT.
-    NFTs: Pug, Shiba Inu, St. Bernard
-    Pug super rare
-    Shiba sort of rare
-    St. bernard common
+Using that number we will get a random NFT.
+NFTs: Pug, Shiba Inu, St. Bernard
+Pug super rare
+Shiba sort of rare
+St. bernard common
 
     Users have to pay to mint an NFT
     The owner of the contract can withdraw the ETH
+
+## Working with images
+
+get the IPFS hashes of our images
+
+1. With our own IPFS nodel. https: //docs. ipfs. io/
+2. pinata: //www.pinata.cloud/
+3. nft.storage https://nft.storage/
+
+### Uploading images to pinata.cloud programmatically
+
+Create account on pinata.cloud
+
+Install @pinata/sdk
+
+```
+yarn add --dev @pinata/sdk
+```
+
+Install path package to work with paths
+
+```
+yarn add --dev path
+```
+
+
