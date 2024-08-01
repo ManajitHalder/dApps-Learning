@@ -6,7 +6,15 @@ const {
     storeTokenUriMetadata,
 } = require("../utils/uploadToPinata")
 
+const FUND_AMOUNT = "1000000000000000000000"
+
 const imagesLocation = "./images/randomNft"
+let tokenURIs = [
+    "ipfs://QmQs4yASJakykKzcUYiJoQEFptCuufghNA3S5J2CkD47tp",
+    "ipfs://QmXry9jwWVKfbt6V87Gzd97WJ5LGAmtyWY7znSQXCRysv9",
+    "ipfs://QmX5V7Xc31vMfM8tYgrNefix1WCFmiMqpLzjDtk6PgTQd2",
+]
+
 const metadataTemplate = {
     name: "",
     description: "",
@@ -28,11 +36,6 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     // 1. With our own IPFS nodel. https: //docs. ipfs. io/
     // 2. pinata ht bs: //www.pinata.cloud/
     // 3. nft.storage https://nft.storage/
-    let tokenURIs = [
-        "ipfs://QmQs4yASJakykKzcUYiJoQEFptCuufghNA3S5J2CkD47tp",
-        "ipfs://QmXry9jwWVKfbt6V87Gzd97WJ5LGAmtyWY7znSQXCRysv9",
-        "ipfs://QmX5V7Xc31vMfM8tYgrNefix1WCFmiMqpLzjDtk6PgTQd2",
-    ]
 
     if (process.env.UPLOAD_TO_PINATA == "true") {
         tokenURIs = await handleTokenURIs()
@@ -51,6 +54,9 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         const tx = await vrfCoordinatorV2Mock.createSubscription()
         const txReceipt = await tx.wait(1)
         subscriptionId = txReceipt.events[0].args.subId
+
+        // Fund the subscription
+        await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, FUND_AMOUNT)
     } else {
         vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2
         subscriptionId = networkConfig[chainId]["subscriptionId"]
