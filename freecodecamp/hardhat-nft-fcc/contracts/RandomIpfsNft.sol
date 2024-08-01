@@ -32,7 +32,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
 
     // Chainlink VRF variables/constants
     VRFCoordinatorV2Interface private immutable i_vrfCoordinatorV2;
-    uint64 private immutable i_subscriptionId;
+    uint256 private immutable i_subscriptionId;
     bytes32 private immutable i_keyHash;
     uint32 private immutable i_callbackGasLimit;
     uint16 private constant REQUEST_CONFIRMATIONS = 3;
@@ -53,7 +53,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
 
     constructor(
         address vrfCoordinatorV2,
-        uint64 subscriptionId,
+        uint256 subscriptionId,
         bytes32 keyHash,
         uint32 callbackGasLimit,
         string[3] memory dogTokenURIs,
@@ -65,7 +65,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         Ownable(initialOwner)
     {
         i_vrfCoordinatorV2 = VRFCoordinatorV2Interface(vrfCoordinatorV2);
-        i_subscriptionId = subscriptionId;
+        i_subscriptionId = uint256(keccak256(abi.encodePacked(subscriptionId)));
         i_keyHash = keyHash;
         i_callbackGasLimit = callbackGasLimit;
 
@@ -90,7 +90,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
     function requestRandomWords() internal returns (uint256 requestId) {
         requestId = i_vrfCoordinatorV2.requestRandomWords(
             i_keyHash,
-            i_subscriptionId,
+            uint64(i_subscriptionId),
             REQUEST_CONFIRMATIONS,
             i_callbackGasLimit,
             NUM_WORDS

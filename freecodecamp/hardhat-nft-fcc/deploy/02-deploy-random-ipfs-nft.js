@@ -38,6 +38,11 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         tokenURIs = await handleTokenURIs()
     }
 
+    // Debug logs
+    // console.log("Chain ID:", chainId)
+    // console.log("Network Config:", networkConfig)
+    // console.log("Current Network Config:", networkConfig[chainId])
+
     let vrfCoordinatorV2Address, subscriptionId, vrfCoordinatorV2Mock
 
     if (developmentChains.includes(network.name)) {
@@ -45,10 +50,10 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
         const tx = await vrfCoordinatorV2Mock.createSubscription()
         const txReceipt = await tx.wait(1)
-        subscriptionId = txReceipt.events[0].args.subscriptionId
+        subscriptionId = txReceipt.events[0].args.subId
     } else {
         vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2
-        subscriptionId = networkConfig[chainId].subscriptionId
+        subscriptionId = networkConfig[chainId]["subscriptionId"]
     }
 
     log("--------------------------------------------------------------------")
@@ -56,10 +61,10 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     const args = [
         vrfCoordinatorV2Address,
         subscriptionId,
-        networkConfig[chainId].keyHash,
-        networkConfig[chainId].callbackGasLimit,
+        networkConfig[chainId]["keyHash"],
+        networkConfig[chainId]["callbackGasLimit"],
         tokenURIs,
-        networkConfig[chainId].mintFee,
+        networkConfig[chainId]["mintFee"],
         vrfCoordinatorV2Address,
     ]
 
