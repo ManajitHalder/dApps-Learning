@@ -130,10 +130,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         uint256 cumulativeSum = 0;
         uint256[3] memory chanceArray = getChanceArray();
         for (uint256 i = 0; i < chanceArray.length; ++i) {
-            if (
-                moddedRng < cumulativeSum &&
-                moddedRng > cumulativeSum + chanceArray[i]
-            ) {
+            if (moddedRng >= cumulativeSum && moddedRng < chanceArray[i]) {
                 return Breed(i);
             }
             cumulativeSum += chanceArray[i];
@@ -144,7 +141,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         case 2: moddedRng = 24 (10 to 29), i = 1, cummuulativeSum = 40, return will be Breed[1] (SHIBA_INU)
                 after 2nd iteration: 24 > 10 && 24 < 10 + 30 (chanceArray[1])
         case 3: moddedRng = 45 (30 to 99), i = 2, cummuulativeSum = 100, return will be Breed[2] (ST_BERNARD)
-                after 3rd iteration: 45 > 40 && 45 < 30 + 100 (chanceArray[2])
+              getDogTokenUris  after 3rd iteration: 45 > 40 && 45 < 30 + 100 (chanceArray[2])
         */
 
         revert RandomIpfsNft__RangeOutOfBounds();
