@@ -176,4 +176,10 @@ Install path package to work with paths
 yarn add --dev path
 ```
 
+## Dynamic SVG NFT
 
+Functionalities of DynamicSvgNft contract
+
+-   Mint
+-   Store SVG information somewhere
+-   Implement some logic to say "Show X Image" or "Show Y Image"
