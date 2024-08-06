@@ -239,4 +239,18 @@ Add as package:
 yarn add --dev base64-sol
 ```
 
+### Function implementing SVG to Base64
+
+```
 import "base64-sol/base64.sol"
+
+string private constant base64EncodedSvgPrefix = "data:image/svg+xml;base64,";
+
+function convertSvgToImageURI(string memory svg) public pure returns (string memory) {
+  string memory svgBase64Encoded = Base64.encode(bytes(string(abi.encodePacked(svg))));
+    return string(abi.encodePacked(base64EncodedSvgPrefix, svgBase64Encoded));
+}
+```
+
+### abi.encode & abi.encodePacked
+
