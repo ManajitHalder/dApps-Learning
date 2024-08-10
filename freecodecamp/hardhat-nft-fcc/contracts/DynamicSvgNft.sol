@@ -2,32 +2,36 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-
+import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import "base64-sol/base64.sol";
-import "hardhat/console.sol";
 
 error ERC721Metadata__URI_QueryFor_NonExistentToken();
 
+/* 
+ What's in this contract:
+ Mint
+ Store SVG information somewhere
+ Implement some logic to say "Show X Image" or "Show Y Image"
+*/
 contract DynamicSvgNft is ERC721 {
-    /* 
-     What's in this contract:
-     Mint
-     Store SVG information somewhere
-     Implement some logic to say "Show X Image" or "Show Y Image"
-    */
-
     uint256 private s_tokenCounter;
-    string private i_lowImageURI;
-    string private i_highImageURI;
-    string private constant base64EncodedSvgPrefix =
-        "data:image/svg+xml;base64,";
+    string private s_lowImageURI;
+    string private s_highImageURI;
+    AggregatorV3Interface internal immutable i_priceFeed;
+    mapping(uint256 => int256) public s_tokenIdToHighValue;
+
+    // Events
+    event CreatedNFT(uint256 indexed tokenId, int256 highValue);
 
     constructor(
-        string memory logSvg,
+        address priceFeedAddress,
+        string memory lowSvg,
         string memory highSvg
     ) ERC721("Dynamic SVG NFT", "DSN") {
         s_tokenCounter = 0;
+        i_priceFeed = AggregatorV3Interface(priceFeedAddress);
+        s_lowImageURI = convertSvgToImageURI(lowSvg);
+        s_highImageURI = convertSvgToImageURI(highSvg);
     }
 
     //https://github.com/Brechtpd/base64
@@ -37,6 +41,7 @@ contract DynamicSvgNft is ERC721 {
         // example:
         // '<svg width="500" height="500" viewBox="0 0 285 350" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="black" d="M150,0,L75,200,L225,200,Z"></path></svg>'
         // would return ""
+        string memory base64EncodedSvgPrefix = "data:image/svg+xml;base64,";
         string memory svgBase64Encoded = Base64.encode(
             bytes(string(abi.encodePacked(svg)))
         );
@@ -44,9 +49,13 @@ contract DynamicSvgNft is ERC721 {
             string(abi.encodePacked(base64EncodedSvgPrefix, svgBase64Encoded));
     }
 
-    function mintNft() public {
+    function mintNft(int256 highValue) public {
+        uint256 newTokenId = s_tokenCounter;
+        s_tokenIdToHighValue[s_tokenCounter] = highValue;
         _safeMint(msg.sender, s_tokenCounter);
         s_tokenCounter += 1;
+
+        emit CreatedNFT(newTokenId, highValue);
     }
 
     function _baseURI() internal pure override returns (string memory) {
@@ -60,12 +69,11 @@ contract DynamicSvgNft is ERC721 {
         //     revert error ERC721Metadata__URI_QueryFor_NonExistentToken();
         // }
 
-        // if (!_exists(tokenId)) {
-        //     revert ERC721Metadata__URI_QueryFor_NonExistentToken();
-        // }
-
-        // require(_exists(tokenId), "URI Query for nonexistent token");
-        string memory imageURI = "hi!";
+        (, int price, , , ) = i_priceFeed.latestRoundData();
+        string memory imageURI = s_lowImageURI;
+        if (price >= s_tokenIdToHighValue[tokenId]) {
+            imageURI = s_highImageURI;
+        }
 
         return
             string(
@@ -76,7 +84,7 @@ contract DynamicSvgNft is ERC721 {
                             abi.encodePacked(
                                 '{"name":"',
                                 name(),
-                                '", "description": "An NFT that changes based on the Chainlink Feed", ',
+                                '", "description":"An NFT that changes based on the Chainlink Feed", ',
                                 '"attributes": [{"trait_type": "coolness", "value": 100}], "image": "',
                                 imageURI,
                                 '"}'
@@ -85,5 +93,21 @@ contract DynamicSvgNft is ERC721 {
                     )
                 )
             );
+    }
+
+    function getLowSVG() public view returns (string memory) {
+        return s_lowImageURI;
+    }
+
+    function getHighSVG() public view returns (string memory) {
+        return s_highImageURI;
+    }
+
+    function getPriceFeed() public view returns (AggregatorV3Interface) {
+        return i_priceFeed;
+    }
+
+    function getTokenCounter() public view returns (uint256) {
+        return s_tokenCounter;
     }
 }
