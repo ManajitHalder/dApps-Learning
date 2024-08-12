@@ -42,3 +42,9 @@ Openzeppelin
 ```
 yarn add --dev @openzeppelin/contracts
 ```
+
+## Solidity patterns
+
+[Pull over Push](https://fravoll.github.io/solidity-patterns/pull_over_push.html)
+
+[https://fravoll.github.io/solidity-patterns/](https://fravoll.github.io/solidity-patterns/)
