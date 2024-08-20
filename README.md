@@ -33,6 +33,27 @@ Alchemy
 - Url:
   - [https://university.alchemy.com/home](https://university.alchemy.com/home)
 
+### CCIP Masterclasses
+
+- Url: Unlock Advanced Use Cases With a Chainlink Masterclass
+  - [https://go.chain.link/masterclasses](https://go.chain.link/masterclasses)
+- Url: Module #1: Mastering Cross-Chain Development With Chainlink CCIP
+  - [https://go.chain.link/masterclasses/ccip-module-1](https://go.chain.link/masterclasses/ccip-module-1)
+- Url: Module #2: Cross-Chain Staking Edition:
+  - [https://go.chain.link/masterclasses/ccip-module-2](https://go.chain.link/masterclasses/ccip-module-2)
+- Url: Module #3: Building Cross-Chain dApps on Arbitrum
+  - [https://go.chain.link/masterclasses/ccip-module-3](https://go.chain.link/masterclasses/ccip-module-3)
+
+### Cohort live classes
+
+- Url:
+  - [https://app.100xdevs.com/](https://app.100xdevs.com/)
+- Description:
+  - Web Development (MERN stack)
+  - DevOps
+  - Web3 dApp developement on Ethereum using Solidity
+  - Web3 dApp developement on Solana using Rust
+
 ### Learn about NFT from nft school
 
 - Url:
