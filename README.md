@@ -49,10 +49,24 @@ Alchemy
 - Url:
   - [https://app.100xdevs.com/](https://app.100xdevs.com/)
 - Description:
-  - Web Development (MERN stack)
+  - Web Development using MERN stack
+    - HTML
+    - CSS
+    - JavaScript
+    - HTTP Server
+    - Databases
+    - ORMs
+    - React
+    - Typescript
+    - NextJS
+
   - DevOps
-  - Web3 dApp developement on Ethereum using Solidity
-  - Web3 dApp developement on Solana using Rust
+  - Web3 dApp developement
+    - On Ethereum using Solidity
+    - On Solana using Rust
+- Syllabus:
+  - [https://blog.100xdevs.com/](https://blog.100xdevs.com/)
+
 
 ### Learn about NFT from nft school
 
