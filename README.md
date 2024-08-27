@@ -53,6 +53,7 @@ Alchemy
     - HTML
     - CSS
     - JavaScript
+    - Create few landing pages
     - HTTP Server
     - Databases
     - ORMs
